@@ -67,6 +67,8 @@ data class PtColors(
     val light: Boolean = false,
     /** Aktivt menypunkt i bunnmenyen. Lysere enn overskriftsfargen der den ligner for mye på de andre. */
     val navActive: Color = topBarText,
+    /** Bakgrunn for innlegg som svarer eller nevner meg: grønn, men blå i det grønne temaet. */
+    val mentionBg: Color = Color(0xFF173D28),
 )
 
 /** Temaene brukeren kan velge mellom på profilsiden. [id] lagres, så den må ikke endres. */
@@ -80,6 +82,7 @@ enum class AppTheme(val id: String, @StringRes val label: Int, val colors: PtCol
             topBar = Color(0xFF132B29), topBarText = Color(0xFF65C89C), border = Color(0xFFAB9977),
             red = Color(0xFF9E555B), blue = Color(0xFF81A6C4), green = Color(0xFF319195), orange = Color(0xFFD6924C),
             pressedBg = Color(0xFF443D30), pressedBorder = Color(0xFF7D7057), overlay = Color(0x33102022),
+            mentionBg = Color(0xFF1A3552),
         ),
     ),
     BLUE(
@@ -123,7 +126,7 @@ enum class AppTheme(val id: String, @StringRes val label: Int, val colors: PtCol
             topBar = Color(0xFFF8FAF9), topBarText = Color(0xFF1F7A5A), border = Color(0xFFA08A62),
             red = Color(0xFFB0444C), blue = Color(0xFF3F6E96), green = Color(0xFF23787C), orange = Color(0xFFB86E25),
             pressedBg = Color(0xFFE6DCC6), pressedBorder = Color(0xFF7D6232), overlay = Color(0xAAE8EEEC),
-            light = true,
+            light = true, mentionBg = Color(0xFFE3F5E5),
         ),
     ),
     ;
@@ -158,6 +161,7 @@ object PT {
     val PressedBorder: Color get() = c.pressedBorder
     val Overlay: Color get() = c.overlay
     val NavActive: Color get() = c.navActive
+    val MentionBg: Color get() = c.mentionBg
 
     const val PanelAlpha = 0.8f
     val Muted: Color get() = FgText.copy(alpha = 0.65f)
@@ -205,12 +209,13 @@ fun PleromastiskTheme(content: @Composable () -> Unit) {
 fun Panel(
     modifier: Modifier = Modifier,
     borderColor: Color = PT.Border,
+    background: Color = PT.Fg,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         modifier
             .fillMaxWidth()
-            .background(PT.Fg.copy(alpha = PT.PanelAlpha))
+            .background(background.copy(alpha = PT.PanelAlpha))
             .border(1.dp, borderColor),
         content = content,
     )

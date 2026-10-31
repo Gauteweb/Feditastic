@@ -428,9 +428,13 @@ fun NotificationsScreen(
                             }
                             if (target != null && target.content.isNotBlank() && n.type != "poll") {
                                 Spacer(Modifier.height(8.dp))
+                                // Svar/nevnelser i samme størrelse og farge som innlegg ellers; resten dempet
+                                val isMention = n.type == "mention"
                                 RichText(
                                     target.content, target.emojis,
-                                    style = MaterialTheme.typography.bodySmall, color = PT.Muted, maxLines = 4,
+                                    style = if (isMention) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
+                                    color = if (isMention) PT.Text else PT.Muted,
+                                    maxLines = if (isMention) Int.MAX_VALUE else 4,
                                     mentions = target.mentions,
                                 )
                             }
@@ -493,6 +497,7 @@ fun AccountScreen(
 ) {
     val account by vm.account.collectAsStateWithLifecycle()
     val relationship by vm.relationship.collectAsStateWithLifecycle()
+    val mediaOnly by vm.mediaOnly.collectAsStateWithLifecycle()
     LaunchedEffect(accountId) { vm.loadHeader(isMe) }
 
     StatusFeed(vm, actions, modifier, header = {
@@ -566,6 +571,22 @@ fun AccountScreen(
                         }
                     }
                 }
+            }
+        }
+        // Alle innlegg / Kun media – mellom profilen og innleggene
+        item {
+            Row(
+                Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                PButton(
+                    stringResource(R.string.profile_all_posts), { vm.setMediaOnly(false) },
+                    Modifier.weight(1f), filled = !mediaOnly,
+                )
+                PButton(
+                    stringResource(R.string.profile_media_only), { vm.setMediaOnly(true) },
+                    Modifier.weight(1f), filled = mediaOnly,
+                )
             }
         }
     })

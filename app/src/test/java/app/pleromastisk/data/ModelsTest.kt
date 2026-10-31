@@ -43,6 +43,16 @@ class ModelsTest {
         assertEquals(false, p.pleroma?.isModerator)
     }
 
+    @Test fun svarOgNevnelserTilMeg() {
+        val mention = json.decodeFromString<Status>(status(""","mentions":[{"id":"me","acct":"meg"}]"""))
+        assertEquals(true, mention.addresses("me"))
+        assertEquals(false, mention.addresses("andre"))
+        assertEquals(false, mention.addresses(null))
+        val reply = json.decodeFromString<Status>(status(""","in_reply_to_account_id":"me""""))
+        assertEquals(true, reply.addresses("me"))
+        assertEquals(false, json.decodeFromString<Status>(status("")).addresses("me"))
+    }
+
     @Test fun leserBotFlagg() {
         assertEquals(true, json.decodeFromString<Account>("""{"id":"1","bot":true}""").bot)
         assertEquals(false, json.decodeFromString<Account>("""{"id":"1"}""").bot)

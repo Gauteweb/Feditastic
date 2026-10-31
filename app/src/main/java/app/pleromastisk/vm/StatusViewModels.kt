@@ -213,7 +213,23 @@ class AccountViewModel(private val accountId: String) : PagedStatusViewModel() {
     private val _relationship = MutableStateFlow<Relationship?>(null)
     val relationship: StateFlow<Relationship?> = _relationship.asStateFlow()
 
-    override suspend fun fetch(maxId: String?) = Graph.api.accountStatuses(accountId, maxId)
+    /** «Kun media»: bare brukerens egne innlegg med bilde eller video. */
+    private val _mediaOnly = MutableStateFlow(false)
+    val mediaOnly: StateFlow<Boolean> = _mediaOnly.asStateFlow()
+
+    override suspend fun fetch(maxId: String?) = Graph.api.accountStatuses(accountId, maxId, _mediaOnly.value)
+
+    // Lyd og delte innlegg kan slippe gjennom tjenerens filter; de lukes bort her.
+    override fun accept(s: Status) = !_mediaOnly.value || (s.reblog == null && s.hasVisualMedia)
+
+    override val maxPagesPerLoad get() = if (_mediaOnly.value) 5 else 1
+
+    fun setMediaOnly(on: Boolean) {
+        if (_mediaOnly.value == on) return
+        _mediaOnly.value = on
+        _items.value = emptyList()
+        refresh()
+    }
 
     fun loadHeader(isMe: Boolean) = launchAction {
         _account.value = Graph.api.account(accountId)

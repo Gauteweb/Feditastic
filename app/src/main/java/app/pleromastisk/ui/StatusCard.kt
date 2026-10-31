@@ -147,6 +147,8 @@ fun StatusCard(
     Panel(
         modifier.then(if (clickable) Modifier.clickable { actions.onOpenStatus(s) } else Modifier),
         borderColor = if (highlighted) PT.TopBarText else PT.Border,
+        // Svar og nevnelser til meg skiller seg ut med egen bakgrunn
+        background = if (s.addresses(Graph.store.active?.userId)) PT.MentionBg else PT.Fg,
     ) {
         Column(Modifier.padding(10.dp)) {
             if (status.reblog != null) {

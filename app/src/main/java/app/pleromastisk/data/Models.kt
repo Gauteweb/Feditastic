@@ -160,7 +160,13 @@ data class Status(
     @SerialName("edited_at") val editedAt: String? = null,
     val application: AppInfo? = null,
     val language: String? = null,
+    @SerialName("in_reply_to_account_id") val inReplyToAccountId: String? = null,
 ) {
+    /** Svarer eller nevner kontoen [userId] (og er ikke skrevet av den selv). */
+    fun addresses(userId: String?): Boolean =
+        userId != null && account.id != userId &&
+            (inReplyToAccountId == userId || mentions.any { it.id == userId })
+
     /** Har minst ett bilde eller én video (ikke bare lyd eller ukjente vedlegg). */
     val hasVisualMedia: Boolean
         get() = mediaAttachments.any { it.isVisual }

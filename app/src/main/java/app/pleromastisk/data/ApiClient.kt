@@ -203,8 +203,12 @@ class ApiClient(private val store: SessionStore) {
 
     suspend fun customEmojis(): List<Emoji> = get("/api/v1/custom_emojis")
 
-    suspend fun accountStatuses(id: String, maxId: String?): List<Status> =
-        get(withPaging("/api/v1/accounts/$id/statuses", maxId))
+    /** [onlyMedia]: bare egne innlegg med vedlegg (ikke delte). Tjeneren filtrerer grovt, appen finfiltrerer. */
+    suspend fun accountStatuses(id: String, maxId: String?, onlyMedia: Boolean = false): List<Status> {
+        val path = "/api/v1/accounts/$id/statuses" +
+            if (onlyMedia) "?only_media=true&exclude_reblogs=true" else ""
+        return get(withPaging(path, maxId))
+    }
 
     /**
      * [onlyMentions] filtrerer på serveren. Pleroma bruker `include_types[]`, Mastodon `types[]` –
