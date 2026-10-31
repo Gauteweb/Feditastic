@@ -203,6 +203,7 @@
     <string name="profile_role_moderator">Moderator</string>
     <string name="profile_all_posts">Alle innlegg</string>
     <string name="profile_media_only">Kun media</string>
+    <string name="update_available">Oppdatering tilgjengelig</string>
     <string name="profile_bot">Automatisert</string>
 
     <!-- Feil -->

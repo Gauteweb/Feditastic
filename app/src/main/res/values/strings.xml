@@ -203,6 +203,7 @@
     <string name="profile_role_moderator">Moderator</string>
     <string name="profile_all_posts">All posts</string>
     <string name="profile_media_only">Media only</string>
+    <string name="update_available">Update available</string>
     <string name="profile_bot">Automated</string>
 
     <!-- Errors -->

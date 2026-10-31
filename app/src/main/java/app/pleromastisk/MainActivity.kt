@@ -1,5 +1,7 @@
 package app.pleromastisk
 
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -59,6 +61,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    /** Ved oppstart, og når appen hentes fram igjen etter mer enn et døgn: se etter ny versjon. */
+    override fun onStart() {
+        super.onStart()
+        lifecycleScope.launch { Graph.updates.checkIfDue() }
     }
 
     override fun onNewIntent(intent: Intent) {

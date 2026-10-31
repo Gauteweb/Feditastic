@@ -1,1 +1,2 @@
-- New app ID (app.feditastic) in preparation for F-Droid. Install it alongside or instead of the old app and log in again
+- New app ID (app.feditastic) in preparation for F-Droid. The old app must be uninstalled, and you need to log in again
+- The version from GitHub shows "Update available" at the top of Home when a newer release is out

@@ -23,6 +23,12 @@ android {
         targetSdk = 35
         versionCode = 23
         versionName = "2.2.4"
+        // Varsel om ny utgivelse på GitHub: bare i egne bygg (githubUpdateCheck=true i local.properties),
+        // ikke i F-Droid-bygg, der F-Droid står for oppdateringene.
+        buildConfigField(
+            "boolean", "UPDATE_CHECK",
+            (localProps.getProperty("githubUpdateCheck") == "true").toString(),
+        )
     }
 
     buildTypes {
@@ -43,7 +49,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
-    buildFeatures { compose = true }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
 }
 

@@ -388,7 +388,7 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
                         factory = viewModelFactory { initializer { ListTimelineViewModel(listId) } },
                     )
                 }
-                StatusFeed(vm, actionsFor(vm))
+                StatusFeed(vm, actionsFor(vm), header = { updateBanner() })
             }
             composable(MEDIA) {
                 // Samme feeder som i «Hjem», men bare innlegg med bilder/video, bildet først

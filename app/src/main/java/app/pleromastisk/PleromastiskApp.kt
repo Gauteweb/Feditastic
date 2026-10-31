@@ -9,6 +9,7 @@ import app.pleromastisk.data.ApiClient
 import app.pleromastisk.data.ApiException
 import app.pleromastisk.data.Emoji
 import app.pleromastisk.data.SessionStore
+import app.pleromastisk.data.UpdateChecker
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
@@ -48,6 +49,8 @@ object Graph {
         private set
     lateinit var api: ApiClient
         private set
+    lateinit var updates: UpdateChecker
+        private set
 
     /** Utløses når brukeren har publisert noe, slik at tidslinjene kan oppdateres. */
     val posted = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
@@ -56,6 +59,7 @@ object Graph {
         appContext = app.applicationContext
         store = SessionStore(app)
         api = ApiClient(store)
+        updates = UpdateChecker(app)
     }
 
     private var emojiCache: Pair<String?, List<Emoji>>? = null

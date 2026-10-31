@@ -1,1 +1,2 @@
-- Ny app-ID (app.feditastic) som forberedelse til F-Droid. Installeres ved siden av eller i stedet for den gamle appen, og du må logge inn på nytt
+- Ny app-ID (app.feditastic) som forberedelse til F-Droid. Den gamle appen må avinstalleres, og du må logge inn på nytt
+- Versjonen fra GitHub viser «Oppdatering tilgjengelig» øverst på Hjem når en nyere utgivelse er ute

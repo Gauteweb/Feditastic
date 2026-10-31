@@ -48,6 +48,7 @@ Her er noen skjermbilder som eksempler på hvordan appen ser ut. Den finnes per 
 - «Om»-knappen i lokal feed viser instansens «Om»-side, tjenestevilkår eller serverregler.
 - Fem fargetemaer i samme stil – Mørk (standard), Grønn, Blå, Lilla og Lys – velges med palett-knappen på «Profil».
 - ⓘ på «Profil» viser informasjon om appen og lenke til kildekoden.
+- Versjonen fra GitHub viser «Oppdatering tilgjengelig» øverst på «Hjem» når det finnes en nyere utgivelse (sjekkes ved oppstart og høyst én gang i døgnet).
 
 ### Ikke med (ennå)
 

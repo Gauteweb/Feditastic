@@ -48,6 +48,7 @@ Here are some screenshots showing what the app looks like. It is currently only 
 - The "About" button in the local feed shows the instance's "About" page, terms of service or server rules.
 - Five colour themes in the same style – Dark (default), Green, Blue, Purple and Light – chosen with the palette button on "Profile".
 - ⓘ on "Profile" shows information about the app and a link to the source code.
+- The version from GitHub shows "Update available" at the top of "Home" when there is a newer release (checked at startup and at most once a day).
 
 ### Not included (yet)
 
