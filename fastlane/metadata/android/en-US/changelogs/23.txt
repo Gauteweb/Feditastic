@@ -1,0 +1,1 @@
+- New app ID (app.feditastic) in preparation for F-Droid. Install it alongside or instead of the old app and log in again

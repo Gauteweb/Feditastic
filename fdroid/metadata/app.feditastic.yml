@@ -1,0 +1,25 @@
+Categories:
+  - Internet
+License: GPL-3.0-or-later
+AuthorName: Gaute Holmin
+SourceCode: https://github.com/Gauteweb/Feditastic
+IssueTracker: https://github.com/Gauteweb/Feditastic/issues
+Changelog: https://github.com/Gauteweb/Feditastic/releases
+
+AutoName: Feditastic
+
+RepoType: git
+Repo: https://github.com/Gauteweb/Feditastic.git
+
+Builds:
+  - versionName: 2.2.4
+    versionCode: 23
+    commit: v2.2.4
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 2.2.4
+CurrentVersionCode: 23

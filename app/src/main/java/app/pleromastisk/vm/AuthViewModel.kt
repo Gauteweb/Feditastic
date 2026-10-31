@@ -111,9 +111,9 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    /** Kalles når nettleseren sender oss tilbake til pleromastisk://oauth?code=… */
+    /** Kalles når nettleseren sender oss tilbake til feditastic://oauth?code=… */
     fun handleRedirect(uri: Uri) {
-        if (uri.scheme != "pleromastisk") return
+        if (uri.scheme != "feditastic") return
         val code = uri.getQueryParameter("code")
         if (code == null) {
             _state.update { it.copy(busy = false, error = Graph.str(R.string.login_denied)) }

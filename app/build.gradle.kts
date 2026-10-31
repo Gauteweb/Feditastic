@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,16 +7,22 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
+/** Lokale innstillinger (git-ignorert), f.eks. signReleaseWithDebugKey=true for egne bygg. */
+val localProps = Properties().apply {
+    rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
+}
+
 android {
+    // Kotlin-pakken heter fortsatt app.pleromastisk; appens ID (applicationId) er app.feditastic
     namespace = "app.pleromastisk"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "app.pleromastisk"
+        applicationId = "app.feditastic"
         minSdk = 26
         targetSdk = 35
-        versionCode = 22
-        versionName = "2.2.3"
+        versionCode = 23
+        versionName = "2.2.4"
     }
 
     buildTypes {
@@ -22,9 +30,11 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Signeres med debug-nøkkelen slik at release-APK-en kan installeres rett på mobilen.
-            // Bytt til en egen signeringsnøkkel før du publiserer i en butikk.
-            signingConfig = signingConfigs.getByName("debug")
+            // Usignert som standard: F-Droid bygger og signerer selv. Med signReleaseWithDebugKey=true
+            // i local.properties signeres den med debug-nøkkelen, så den kan installeres rett på mobilen.
+            if (localProps.getProperty("signReleaseWithDebugKey") == "true") {
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
     }
 

@@ -74,10 +74,10 @@ echo "sdk.dir=/sti/til/Android/Sdk" > local.properties
 ```
 
 `./gradlew assembleRelease` gir den lille, optimaliserte APK-en (ca. 2 MB, ikke «debuggable»).
-Den er signert med debug-nøkkelen slik at den kan installeres rett på mobilen. Bytt til din
-egen signeringsnøkkel i `app/build.gradle.kts` før du publiserer i en app-butikk. Vil du
-oppdatere en eksisterende installasjon, må ny APK være signert med samme nøkkel som den
-gamle, ellers må du avinstallere først.
+Den er usignert som standard, fordi F-Droid bygger og signerer appen selv. Vil du installere
+den rett på mobilen, legg til `signReleaseWithDebugKey=true` i `local.properties`, så signeres
+den med debug-nøkkelen. Vil du oppdatere en eksisterende installasjon, må ny APK være signert
+med samme nøkkel som den gamle, ellers må du avinstallere først.
 
 ## Teknisk
 
@@ -89,9 +89,9 @@ gamle, ellers må du avinstallere først.
 | Navigasjon | Navigation Compose |
 | Chat | Android WebView med [Cinny](https://cinny.in) fra chat.gaute.space |
 | API | Mastodon-kompatibelt API (`/api/v1/...`), som Pleroma, Akkoma, GoToSocial og Mastodon støtter |
-| Redirect-skjema | `pleromastisk://oauth` |
+| Redirect-skjema | `feditastic://oauth` |
 | OAuth-scopes | `read write follow push` |
-| Pakkenavn | `app.pleromastisk` |
+| Pakkenavn | `app.feditastic` (Kotlin-pakke: `app.pleromastisk`) |
 
 Kildekoden ligger i `app/src/main/java/app/pleromastisk/`:
 
