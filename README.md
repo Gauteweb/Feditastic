@@ -1,133 +1,138 @@
 # Feditastic
 
-Dette er en Android-klient for Fediverset. Den virker mot plattformer som for eksempel Pleroma Social,
-Akkoma, GoToSocial og Mastodon. Appen har norsk og engelsk grensesnitt.
+*English · [Norsk](README_no.md)*
 
-## Skjermbilder
+This is an Android client for the Fediverse. It works with platforms such as Pleroma Social,
+Akkoma, GoToSocial and Mastodon. The app has a Norwegian and an English user interface.
 
-Her er noen skjermbilder som eksempler på hvordan appen ser ut. Den finnes per nå kun for Android.
+## Screenshots
 
-![Eksempler](Feditastic_screenshots.jpg)
+Here are some screenshots showing what the app looks like. It is currently only available for Android.
 
-## Funksjoner
+![Examples](Feditastic_screenshots.jpg)
 
-**Lese**
-- Innlogging med OAuth på instansens egen side – passordet går aldri via appen.
-- Flere brukere, også på ulike instanser. Bytt med «Bytt bruker» på profilsiden.
-- Tidslinjer: Hjem, lokal feed, fødererte innlegg og egne lister (velg i «Hjem ▾»).
-- Tråder, profiler med profilfelt og bekreftede lenker, og følg/slutt å følge.
-- Lenkeforhåndsvisning, antall svar/delinger/favoritter og «via <app>».
-- Egendefinerte emojier fra instansen, avstemninger og varsler med filter for **Alle** eller **Svar**.
-- Søk etter brukere (`@navn@domene`) og emneknagger. Trykk på #emneknagger og @omtaler for å åpne dem i appen.
+## Features
 
-**Skrive og samhandle**
-- Svar, del, favoritt, bokmerke, kopier lenke og slett eller rediger egne innlegg.
-- Synlighet, innholdsvarsel, opptil 4 bilder med alt-tekst, Markdown, emoji-velger og språkvalg (nn, nb, en).
-- Tegngrensen hentes fra instansen (5000 hvis den ikke oppgir noe).
-- Legg brukere til i lister fra profilen deres.
+**Reading**
+- Login with OAuth on the instance's own page – your password never passes through the app.
+- Multiple accounts, also on different instances. Switch with "Switch account" on the profile page.
+- Timelines: Home, local feed, federated posts and your own lists (choose in "Home ▾").
+- Threads, profiles with profile fields and verified links, and follow/unfollow.
+- Profiles show the user's role on the instance (e.g. admin or moderator) and mark automated accounts (bots).
+  Choose between **All posts** and **Media only** (the user's own posts with images or video).
+- Link previews, number of replies/boosts/favourites and "via <app>".
+- Custom emoji from the instance, polls, and notifications with a filter for **All** or **Replies**.
+  Replies and mentions are shown in full in the notifications.
+- Posts that reply to or mention you stand out with a green background (blue in the Green theme).
+- Search for users (`@name@domain`) and hashtags. Tap #hashtags and @mentions to open them in the app.
 
-**Bilder og video**
-- Bilder vises uten beskjæring. Trykk for fullskjerm med alt-tekst, zoom og sveip mellom bilder.
-- Video vises med forhåndsbilde og spilles av i en annen app.
-- Fanen «Bilder» viser de samme feedene som «Hjem», men bare innlegg med bilder eller video – med
-  bildet først og teksten under, som i Pixelfed og Instagram. Flere bilder blas sidelengs.
+**Writing and interacting**
+- Reply, boost, favourite, bookmark, copy link, and delete or edit your own posts.
+- Visibility, content warning, up to 4 images with alt text, Markdown, emoji picker and language selection (nn, nb, en).
+- The character limit is fetched from the instance (5000 if it doesn't specify one).
+- Add users to lists from their profile.
 
-**Navigasjon**
-- Bunnmeny: Hjem · Bilder · Varsler · Søk · Skriv · Profil. Hold inne en knapp for å skjule tekstene.
-- Sveip mellom fanene. Dobbelttrykk på en fane for å oppdatere, eller på toppfeltet for å rulle til toppen.
+**Images and video**
+- Images are shown without cropping. Tap for full screen with alt text, zoom and swiping between images.
+- Videos play directly in the feed. Animated GIFs play in posts, emoji and profile pictures.
+- The "Media" tab shows the same feeds as "Home", but only posts with images or video – with
+  the image first and the text below, like in Pixelfed and Instagram. Multiple images are swiped sideways.
 
-**Chat og annet**
-- Chat-ikonet på «Hjem» åpner «Matrix»: [chat.gaute.space](https://chat.gaute.space) i appen – Matrix-klienten
-  [Cinny](https://cinny.in) med appens farger. Forbindelsen holdes i live når du bytter faner.
-- «Om»-knappen i lokal feed viser instansens «Om»-side og tjenestevilkår.
-- Fem fargetemaer i samme stil – Mørk (standard), Grønn, Blå, Lilla og Lys – velges med palett-knappen på «Profil».
-- ⓘ på «Profil» viser informasjon om appen og lenke til kildekoden.
+**Navigation**
+- Bottom bar: Home · Media · Alerts · Search · Write · Profile. Long-press a button to hide the labels.
+- Swipe between tabs. Double-tap a tab to refresh, or the top bar to scroll to the top.
 
-### Ikke med (ennå)
+**Chat and more**
+- The chat icon on "Home" opens "Matrix": [chat.gaute.space](https://chat.gaute.space) in the app – the Matrix client
+  [Cinny](https://cinny.in) in the app's colours. The connection is kept alive when you switch tabs.
+- The "About" button in the local feed shows the instance's "About" page, terms of service or server rules.
+- Five colour themes in the same style – Dark (default), Green, Blue, Purple and Light – chosen with the palette button on "Profile".
+- ⓘ on "Profile" shows information about the app and a link to the source code.
 
-Søk i innleggstekst, Pleroma-chat, å sende emoji-reaksjoner, push-varsler, sanntidsstrøm, redigering av profil
-og avspilling av video i appen (åpnes i en annen app).
+### Not included (yet)
 
-## Installere
+Full-text search in posts, Pleroma chat, sending emoji reactions, push notifications, streaming and profile editing.
 
-1. Last ned `Feditastic.apk` fra siden for utgivelser i dette repoet.
-2. Tillat installasjon fra ukjente kilder for appen du åpner filen med.
-3. Åpne **Feditastic**, skriv inn instansen (f.eks. `social.gaute.space`) og trykk
-   **Logg inn**. Godkjenn appen i nettleseren – du sendes automatisk tilbake til appen.
+## Installing
 
-Krever Android 8.0 (API 26) eller nyere.
+1. Download `Feditastic.apk` from the releases page of this repository.
+2. Allow installing from unknown sources for the app you open the file with.
+3. Open **Feditastic**, enter your instance (e.g. `social.gaute.space`) and tap
+   **Log in**. Approve the app in the browser – you are sent back to the app automatically.
 
-## Bygge selv
+Requires Android 8.0 (API 26) or newer.
 
-Du trenger JDK 17 eller nyere og Android SDK (plattform 35). Enklest er å åpne mappen i
-Android Studio. Fra kommandolinjen:
+## Building it yourself
+
+You need JDK 17 or newer and the Android SDK (platform 35). The easiest way is to open the folder in
+Android Studio. From the command line:
 
 ```bash
-echo "sdk.dir=/sti/til/Android/Sdk" > local.properties
+echo "sdk.dir=/path/to/Android/Sdk" > local.properties
 ./gradlew assembleDebug
 # APK: app/build/outputs/apk/debug/app-debug.apk
 ```
 
-`./gradlew assembleRelease` gir den lille, optimaliserte APK-en (ca. 2 MB, ikke «debuggable»).
-Den er signert med debug-nøkkelen slik at den kan installeres rett på mobilen. Bytt til din
-egen signeringsnøkkel i `app/build.gradle.kts` før du publiserer i en app-butikk. Vil du
-oppdatere en eksisterende installasjon, må ny APK være signert med samme nøkkel som den
-gamle, ellers må du avinstallere først.
+`./gradlew assembleRelease` gives the small, optimised APK (about 2 MB, not "debuggable").
+It is signed with the debug key so it can be installed directly on the phone. Switch to your
+own signing key in `app/build.gradle.kts` before publishing in an app store. To update an
+existing installation, the new APK must be signed with the same key as the old one,
+otherwise you have to uninstall first.
 
-## Teknisk
+## Technical
 
 | | |
 |---|---|
-| Språk / UI | Kotlin, Jetpack Compose (Material 3 med eget tema) |
-| Nettverk | OkHttp + kotlinx.serialization |
-| Bilder | Coil |
-| Navigasjon | Navigation Compose |
-| Chat | Android WebView med [Cinny](https://cinny.in) fra chat.gaute.space |
-| API | Mastodon-kompatibelt API (`/api/v1/...`) som Pleroma implementerer |
-| Redirect-skjema | `pleromastisk://oauth` |
-| OAuth-scopes | `read write follow push` |
-| Pakkenavn | `app.pleromastisk` |
+| Language / UI | Kotlin, Jetpack Compose (Material 3 with a custom theme) |
+| Networking | OkHttp + kotlinx.serialization |
+| Images | Coil |
+| Navigation | Navigation Compose |
+| Chat | Android WebView with [Cinny](https://cinny.in) from chat.gaute.space |
+| API | Mastodon-compatible API (`/api/v1/...`), supported by Pleroma, Akkoma, GoToSocial and Mastodon |
+| Redirect scheme | `pleromastisk://oauth` |
+| OAuth scopes | `read write follow push` |
+| Package name | `app.pleromastisk` |
 
-Kildekoden ligger i `app/src/main/java/app/pleromastisk/`:
+The source code is in `app/src/main/java/app/pleromastisk/`:
 
-- `data/` – datamodeller, API-klient og lagring av innlogging
-- `vm/` – ViewModels (tidslinjer, tråd, profil, varsler, lister, innlogging)
-- `ui/` – skjermer, tema (`Theme.kt` har fargene fra Pleroma-temaet) og komponenter
+- `data/` – data models, API client and login storage
+- `vm/` – ViewModels (timelines, thread, profile, notifications, lists, login)
+- `ui/` – screens, theme (`Theme.kt` has the colours from the Pleroma theme) and components
 
-## Personvern
+## Privacy
 
-Appen har ingen sporing eller analyse. Den snakker bare med instansen du velger, og henter
-bilder og emojier fra adressene instansen oppgir. Tilgangstoken lagres kun lokalt på
-enheten, og «Logg ut» sletter det for brukeren du er logget inn som.
+The app has no tracking or analytics. It only talks to the instance you choose, and loads
+images and emoji from the addresses the instance provides. The access token is stored only
+locally on the device, and "Log out" deletes it for the account you are logged in as.
 
-Åpner du chatten, lastes Cinny fra chat.gaute.space, og den snakker med Matrix-tjeneren du
-logger inn på der (som standard norge.chat). Innloggingen i chatten lagres i appens egen
-nettleserlagring på enheten og er uavhengig av Pleroma-innloggingen.
+If you open the chat, Cinny is loaded from chat.gaute.space, and it talks to the Matrix server
+you log in to there (norge.chat by default). The chat login is stored in the app's own
+browser storage on the device and is independent of the Fediverse login.
 
-## Lisens
+## License
 
 Copyright © 2026 Gaute Holmin
 
-Feditastic er fri programvare, lisensiert under
-[**GNU General Public License versjon 3 eller senere (GPL-3.0-or-later)**](https://www.gnu.org/licenses/gpl-3.0.html).
-Fullstendig tekst ligger i [`LICENSE`](LICENSE).
+Feditastic is free software, licensed under the
+[**GNU General Public License version 3 or later (GPL-3.0-or-later)**](https://www.gnu.org/licenses/gpl-3.0.html).
+The full text is in [`LICENSE`](LICENSE).
 
-I praksis betyr det:
+In practice, this means:
 
-- ✅ Du kan bruke, kopiere, endre og dele appen og koden, også kommersielt.
-- ✅ Deler du appen eller en endret versjon av den, må du gjøre **kildekoden tilgjengelig
-  under samme lisens** (GPL-3.0-or-later), og beholde opphavsrettsmerknadene.
-- ❌ Du kan **ikke** lage en lukket versjon av appen eller koden og distribuere den.
+- ✅ You may use, copy, modify and share the app and the code, also commercially.
+- ✅ If you share the app or a modified version of it, you must make the **source code available
+  under the same license** (GPL-3.0-or-later) and keep the copyright notices.
+- ❌ You may **not** make a closed-source version of the app or the code and distribute it.
 
-Programmet leveres **uten noen form for garanti**, se avsnitt 15 og 16 i lisensen.
+The program comes **without any warranty**, see sections 15 and 16 of the license.
 
-**Bakgrunnsbildet** (`app/src/main/res/drawable-nodpi/bakgrunn.jpg`) er tatt av
-Gaute Holmin og er lisensiert under den samme lisensen som resten av appen (GPL-3.0-or-later).
+**The background image** (`app/src/main/res/drawable-nodpi/bakgrunn.jpg`) was taken by
+Gaute Holmin and is licensed under the same license as the rest of the app (GPL-3.0-or-later).
 
-**Chatten** er [Cinny](https://cinny.in) ([kildekode](https://github.com/cinnyapp/cinny)),
-en Matrix-klient laget av Ajay Bura og bidragsyterne til Cinny-prosjektet, lisensiert under
-AGPL-3.0. Cinny er ikke en del av appen: den kjører på chat.gaute.space og vises i appen,
-som legger på egne farger.
+**The chat** is [Cinny](https://cinny.in) ([source code](https://github.com/cinnyapp/cinny)),
+a Matrix client made by Ajay Bura and the contributors to the Cinny project, licensed under
+AGPL-3.0. Cinny is not part of the app: it runs on chat.gaute.space and is shown in the app,
+which applies its own colours.
 
-Tredjepartsbiblioteker (Jetpack Compose, OkHttp, Coil, kotlinx.serialization m.fl.) er
-Apache-2.0-lisensiert og følger sine egne vilkår.
+Third-party libraries (Jetpack Compose, OkHttp, Coil, kotlinx.serialization and others) are
+Apache-2.0 licensed and follow their own terms.

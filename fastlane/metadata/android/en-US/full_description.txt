@@ -1,4 +1,4 @@
-<p>Feditastic is an Android client for <a href="https://pleroma.social">Pleroma</a> instances, with a dark teal theme of its own. The app is shown in Norwegian when the phone is set to Norwegian (Bokmål or Nynorsk), and in English otherwise. It is made for social.gaute.space, but works with other Pleroma instances and, in principle, other servers with a Mastodon-compatible API.</p>
+<p>Feditastic is an Android client for the Fediverse. It works with platforms such as <a href="https://pleroma.social">Pleroma</a>, Akkoma, GoToSocial and Mastodon. The app is shown in Norwegian when the phone is set to Norwegian (Bokmål or Nynorsk), and in English otherwise.</p>
 
 <p><b>Features</b></p>
 <ul>
@@ -6,19 +6,22 @@
 <li>Multiple accounts, also on different instances, with "Switch account" on the profile page</li>
 <li>Timelines: Home, Local, Federated and your own lists</li>
 <li>Media tab: only posts with images or video, image first – like Pixelfed and Instagram</li>
+<li>Videos play directly in the feed, and animated GIFs play in posts, emoji and profile pictures</li>
 <li>Reply, boost, favourite, bookmark, edit and delete your own posts</li>
 <li>Compose posts with visibility, content warning, up to 4 images with alt text, Markdown and language tagging (nn, nb, en)</li>
 <li>Custom emoji from the instance, with a searchable emoji picker</li>
-<li>Image viewer with zoom and alt text, video thumbnails and link previews</li>
+<li>Image viewer with zoom and alt text, and link previews</li>
 <li>Search for users and hashtags</li>
-<li>Threads, profiles with profile fields and a full-size profile picture, follow/unfollow and add to list</li>
-<li>Notifications, including Pleroma emoji reactions, and polls</li>
-<li>Five colour themes: Standard, Blue, Purple, Dark and Light</li>
+<li>Threads, profiles with profile fields, the user's role on the instance, a label for automated accounts and a full-size profile picture</li>
+<li>"All posts" and "Media only" on profiles, follow/unfollow and add to list</li>
+<li>Notifications, including Pleroma emoji reactions, with replies and mentions shown in full, and polls</li>
+<li>Posts that reply to or mention you stand out with their own background colour</li>
+<li>Five colour themes: Dark (default), Green, Blue, Purple and Light</li>
 <li>Swipe between tabs, compact bottom bar, double-tap a tab to refresh and the top bar to scroll to top</li>
 <li>Chat: the chat icon on Home opens chat.gaute.space in the app – the Matrix client <a href="https://cinny.in">Cinny</a> in the app's colours</li>
-<li>"About this instance" with the instance's own description and terms of service</li>
+<li>"About this instance" with the instance's own description, terms of service or server rules</li>
 </ul>
 
-<p><b>Not yet supported:</b> full-text search, Pleroma chat, sending emoji reactions, push notifications, streaming, profile editing and in-app video playback.</p>
+<p><b>Not yet supported:</b> full-text search, Pleroma chat, sending emoji reactions, push notifications, streaming and profile editing.</p>
 
 <p><b>Privacy:</b> No tracking or analytics. The app only talks to the instance you choose, and the access token is stored locally on the device. If you open the chat, it is loaded from chat.gaute.space and talks to the Matrix server you log in to there.</p>

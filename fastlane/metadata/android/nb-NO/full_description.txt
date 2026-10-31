@@ -1,4 +1,4 @@
-<p>Feditastic er en Android-app for <a href="https://pleroma.social">Pleroma</a>-instanser, med norsk og engelsk grensesnitt og et eget mørkt, blågrønt tema. Appen er laget for social.gaute.space, men fungerer mot andre Pleroma-instanser og i prinsippet andre tjenere med Mastodon-kompatibelt API.</p>
+<p>Feditastic er en Android-klient for Fediverset. Den virker mot plattformer som for eksempel <a href="https://pleroma.social">Pleroma</a>, Akkoma, GoToSocial og Mastodon. Appen vises på norsk når telefonen er satt til norsk (bokmål eller nynorsk), og ellers på engelsk.</p>
 
 <p><b>Funksjoner</b></p>
 <ul>
@@ -6,19 +6,22 @@
 <li>Flere brukere, også på ulike instanser, med «Bytt bruker» på profilsiden</li>
 <li>Tidslinjer: Hjem, Lokalt, Føderert og egne lister</li>
 <li>Fanen «Bilder»: bare innlegg med bilder eller video, med bildet først – som i Pixelfed og Instagram</li>
+<li>Video spilles av rett i feeden, og animerte GIF-er spilles av i innlegg, emojier og profilbilder</li>
 <li>Svar, del, favoritt, bokmerke, rediger og slett egne innlegg</li>
 <li>Skriv innlegg med synlighet, innholdsvarsel, opptil 4 bilder med alt-tekst, Markdown og språkmerking (nn, nb, en)</li>
 <li>Egendefinerte emojier fra instansen, med søkbar emoji-velger</li>
-<li>Bildevisning med zoom og alt-tekst, forhåndsbilde av video og lenkeforhåndsvisning</li>
+<li>Bildevisning med zoom og alt-tekst, og lenkeforhåndsvisning</li>
 <li>Søk etter brukere og emneknagger</li>
-<li>Tråder, profiler med profilfelt og profilbilde i stort format, følg/slutt å følge og legg til i liste</li>
-<li>Varsler, inkludert Pleroma-emojireaksjoner, og avstemninger</li>
-<li>Fem fargetemaer: Standard, Blå, Lilla, Mørk og Lys</li>
+<li>Tråder, profiler med profilfelt, brukerens rolle på instansen, merking av automatiserte kontoer og profilbilde i stort format</li>
+<li>«Alle innlegg» og «Kun media» på profiler, følg/slutt å følge og legg til i liste</li>
+<li>Varsler, inkludert Pleroma-emojireaksjoner, der svar og nevnelser vises i sin helhet, og avstemninger</li>
+<li>Innlegg som svarer eller nevner deg skiller seg ut med egen bakgrunnsfarge</li>
+<li>Fem fargetemaer: Mørk (standard), Grønn, Blå, Lilla og Lys</li>
 <li>Sveip mellom faner, kompakt bunnmeny, dobbelttrykk på en fane for å oppdatere og på toppfeltet for å gå til toppen</li>
 <li>Chat: chat-ikonet på «Hjem» åpner chat.gaute.space i appen – Matrix-klienten <a href="https://cinny.in">Cinny</a> med appens farger</li>
-<li>«Om instansen» med instansens egen tekst og tjenestevilkår</li>
+<li>«Om instansen» med instansens egen tekst, tjenestevilkår eller serverregler</li>
 </ul>
 
-<p><b>Ikke med ennå:</b> søk i innleggstekst, Pleroma-chat, å sende emoji-reaksjoner, push-varsler, sanntidsstrøm, redigering av profil og avspilling av video i appen.</p>
+<p><b>Ikke med ennå:</b> søk i innleggstekst, Pleroma-chat, å sende emoji-reaksjoner, push-varsler, sanntidsstrøm og redigering av profil.</p>
 
 <p><b>Personvern:</b> Appen har ingen sporing eller analyse. Den snakker bare med instansen du velger, og tilgangstokenet lagres kun lokalt på enheten. Åpner du chatten, lastes den fra chat.gaute.space og snakker med Matrix-tjeneren du logger inn på der.</p>

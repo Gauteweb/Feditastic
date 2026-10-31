@@ -1,1 +1,1 @@
-Pleroma client in Norwegian and English, for Mastodon-compatible servers too
+Fediverse client for Pleroma, Akkoma, GoToSocial and Mastodon
