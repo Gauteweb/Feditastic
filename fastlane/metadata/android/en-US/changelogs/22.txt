@@ -1,0 +1,3 @@
+- Profiles have "All posts" and "Media only" buttons; media only shows the user's own posts with images or video
+- Replies and mentions in notifications are shown in full, in normal size and colour
+- Posts that reply to or mention you get a green background (blue in the Green theme)

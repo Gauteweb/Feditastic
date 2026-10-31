@@ -1,0 +1,3 @@
+- Profilsiden har knappene «Alle innlegg» og «Kun media»; kun media viser brukerens egne innlegg med bilde eller video
+- Svar og nevnelser i varslene vises i sin helhet, i vanlig størrelse og farge
+- Innlegg som svarer eller nevner deg får grønn bakgrunn (blå i det grønne temaet)
