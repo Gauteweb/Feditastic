@@ -132,7 +132,7 @@ private const val INSTANCE_ABOUT = "instance_about"
 private const val CHAT = "chat"
 private const val COMPOSE_BASE = "compose"
 private const val COMPOSE =
-    "compose?replyId={replyId}&replyMentions={replyMentions}&replyVis={replyVis}&editId={editId}"
+    "compose?replyId={replyId}&replyMentions={replyMentions}&replyTags={replyTags}&replyVis={replyVis}&editId={editId}"
 
 private val TopLevel = setOf(HOME, MEDIA, NOTIFICATIONS, SEARCH, PROFILE)
 
@@ -480,6 +480,7 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
                 arguments = listOf(
                     navArgument("replyId") { type = NavType.StringType; nullable = true; defaultValue = null },
                     navArgument("replyMentions") { type = NavType.StringType; nullable = true; defaultValue = null },
+                    navArgument("replyTags") { type = NavType.StringType; nullable = true; defaultValue = null },
                     navArgument("replyVis") { type = NavType.StringType; nullable = true; defaultValue = null },
                     navArgument("editId") { type = NavType.StringType; nullable = true; defaultValue = null },
                 ),
@@ -487,6 +488,7 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
                 ComposeScreen(
                     replyId = e.arguments?.getString("replyId"),
                     replyMentions = e.arguments?.getString("replyMentions"),
+                    replyTags = e.arguments?.getString("replyTags"),
                     replyVisibility = e.arguments?.getString("replyVis"),
                     editId = e.arguments?.getString("editId"),
                     maxChars = state.maxChars,
@@ -505,7 +507,9 @@ private fun replyRoute(s: Status, myAcct: String?): String {
         .filter { it.isNotBlank() && it != myAcct }
         .distinct()
         .joinToString(" ")
-    return "compose?replyId=${Uri.encode(s.id)}&replyMentions=${Uri.encode(handles)}&replyVis=${Uri.encode(s.visibility)}"
+    val tags = hashtagsIn(s.content, s.tags.map { it.name }).joinToString(" ")
+    return "compose?replyId=${Uri.encode(s.id)}&replyMentions=${Uri.encode(handles)}" +
+        "&replyTags=${Uri.encode(tags)}&replyVis=${Uri.encode(s.visibility)}"
 }
 
 /** Navnet på en valgt feed i Hjem/Bilder, eller null når listen ikke (lenger) finnes. */

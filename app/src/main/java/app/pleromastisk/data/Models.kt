@@ -151,6 +151,7 @@ data class Status(
     val account: Account,
     @SerialName("media_attachments") val mediaAttachments: List<MediaAttachment> = emptyList(),
     val mentions: List<Mention> = emptyList(),
+    val tags: List<Tag> = emptyList(),
     val emojis: List<Emoji> = emptyList(),
     val favourited: Boolean = false,
     val reblogged: Boolean = false,
@@ -171,6 +172,10 @@ data class Status(
     val hasVisualMedia: Boolean
         get() = mediaAttachments.any { it.isVisual }
 }
+
+/** Emneknagg i et innlegg (navnet uten «#»). */
+@Serializable
+data class Tag(val name: String = "")
 
 @Serializable
 data class StatusSource(

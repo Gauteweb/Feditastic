@@ -72,7 +72,9 @@ import app.pleromastisk.R
 import app.pleromastisk.data.Emoji
 import app.pleromastisk.userMessage
 import coil.compose.AsyncImage
+import app.pleromastisk.data.Account
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /** Et vedlegg i innlegget – enten nylig lastet opp fra telefonen eller eksisterende (ved redigering). */
@@ -112,6 +114,7 @@ private fun visibilityLabel(v: String): String = stringResource(
 fun ComposeScreen(
     replyId: String?,
     replyMentions: String?,
+    replyTags: String?,
     replyVisibility: String?,
     editId: String?,
     maxChars: Int,
@@ -124,9 +127,7 @@ fun ComposeScreen(
     val focus = remember { FocusRequester() }
     val editing = editId != null
 
-    val initial = replyMentions?.split(" ")?.filter { it.isNotBlank() }
-        ?.joinToString(" ") { "@$it" }?.plus(" ").orEmpty()
-    var text by remember { mutableStateOf(TextFieldValue(initial, TextRange(initial.length))) }
+    var text by remember { mutableStateOf(replyDraft(replyMentions, replyTags)) }
     var cwOn by rememberSaveable { mutableStateOf(false) }
     var cw by rememberSaveable { mutableStateOf("") }
     var visibility by rememberSaveable { mutableStateOf(replyVisibility ?: "public") }
@@ -206,6 +207,26 @@ fun ComposeScreen(
     }
 
     LaunchedEffect(Unit) { if (!editing) focus.requestFocus() }
+
+    // Forslag når man skriver «@navn»: søker blant kontoer jeg følger (litt forsinket, så vi
+    // ikke spør tjeneren for hvert tastetrykk).
+    val mentionQuery = mentionQueryAt(text.text, text.selection.start, text.selection.end)
+    var suggestions by remember { mutableStateOf<List<Account>>(emptyList()) }
+    LaunchedEffect(mentionQuery?.query) {
+        val q = mentionQuery?.query
+        if (q == null) {
+            suggestions = emptyList()
+            return@LaunchedEffect
+        }
+        delay(250)
+        suggestions = try {
+            Graph.api.searchFollowing(q)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 
     /** Setter inn :kortkode: der markøren står, med mellomrom rundt slik at instansen gjenkjenner den. */
     fun insertEmoji(e: Emoji) {
@@ -399,6 +420,13 @@ fun ComposeScreen(
                         }
                     }
                 }
+            }
+        }
+
+        if (mentionQuery != null && suggestions.isNotEmpty()) {
+            MentionSuggestions(suggestions) { acc ->
+                text = insertMention(text, mentionQuery, acc.acct)
+                suggestions = emptyList()
             }
         }
 

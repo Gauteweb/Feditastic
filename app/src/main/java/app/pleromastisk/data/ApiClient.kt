@@ -187,6 +187,10 @@ class ApiClient(private val store: SessionStore) {
     suspend fun search(q: String, type: String, resolve: Boolean): SearchResponse =
         get("/api/v2/search?q=${Uri.encode(q)}&type=$type&limit=20" + if (resolve) "&resolve=true" else "")
 
+    /** Kontoer jeg følger som matcher [q] – brukes til forslag når man skriver «@navn». */
+    suspend fun searchFollowing(q: String, limit: Int = 8): List<Account> =
+        get("/api/v1/accounts/search?q=${Uri.encode(q)}&limit=$limit&following=true&resolve=false")
+
     suspend fun lists(): List<MastoList> = get("/api/v1/lists")
 
     /** Listene (av mine) som en konto ligger i. */
