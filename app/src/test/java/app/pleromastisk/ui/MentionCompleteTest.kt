@@ -33,16 +33,22 @@ class MentionCompleteTest {
 }
 
 class ReplyDraftTest {
-    @Test fun utenKnaggerSomFoer() {
+    @Test fun utenKnaggerMarkoerPaaLinjenUnder() {
         val d = replyDraft("bob alice@x.org", null)
-        assertEquals("@bob @alice@x.org ", d.text)
+        assertEquals("@bob @alice@x.org\n", d.text)
         assertEquals(TextRange(d.text.length), d.selection)
     }
 
-    @Test fun medKnaggerMarkoerPaaLedigLinje() {
+    @Test fun medKnaggerMarkoerPaaLinjenUnder() {
         val d = replyDraft("bob", "Fjellet tur")
-        assertEquals("@bob\n\n\n\n#Fjellet #tur", d.text)
-        assertEquals(TextRange(6), d.selection)
+        assertEquals("@bob\n\n\n#Fjellet #tur", d.text)
+        assertEquals(TextRange(5), d.selection)
+    }
+
+    @Test fun ingentingGirTomTekst() {
+        val d = replyDraft(null, null)
+        assertEquals("", d.text)
+        assertEquals(TextRange(0), d.selection)
     }
 
     @Test fun bareKnagger() {

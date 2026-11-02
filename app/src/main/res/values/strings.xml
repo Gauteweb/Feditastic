@@ -121,6 +121,8 @@
     <string name="retry">Try again</string>
     <string name="boosted_by">%1$s boosted</string>
     <string name="show_more">Show</string>
+    <string name="read_more">Show all</string>
+    <string name="read_less">Show less</string>
     <string name="show_less">Hide</string>
     <string name="sensitive_media">Sensitive content – tap to show</string>
     <string name="audio_attachment">Audio</string>

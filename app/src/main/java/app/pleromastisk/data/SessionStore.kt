@@ -203,11 +203,6 @@ class SessionStore(context: Context) {
         updateActive { it.copy(theme = id) }
     }
 
-    /** Bunnmenyen uten tekst under ikonene (slås av/på ved å holde inne en menyknapp). */
-    var compactNav: Boolean
-        get() = sp.getBoolean("compact_nav", false)
-        set(v) = sp.edit().putBoolean("compact_nav", v).apply()
-
     /** Før flere brukere: én bruker lå i egne nøkler. Flyttes inn i brukerlisten første gang. */
     private fun migrateSingleAccount() {
         if (sp.contains("accounts")) return

@@ -224,6 +224,8 @@ fun StatusCard(
                     RichText(
                         contentHtml, s.emojis, style = MaterialTheme.typography.bodyMedium, color = PT.Text,
                         mentions = s.mentions,
+                        // Innlegget som er åpnet i en tråd vises alltid i sin helhet
+                        collapseAfter = if (highlighted) null else CollapseChars,
                     )
                 }
                 MediaGrid(attachments, s.sensitive)
@@ -310,7 +312,7 @@ fun MediaPostCard(status: Status, actions: StatusActions, modifier: Modifier = M
                 if (s.content.isNotBlank() && !isBlankHtml(s.content)) {
                     RichText(
                         s.content, s.emojis, style = MaterialTheme.typography.bodyMedium, color = PT.Text,
-                        mentions = s.mentions,
+                        mentions = s.mentions, collapseAfter = CollapseChars,
                     )
                 }
                 s.poll?.let { PollView(s, it, actions) }

@@ -6,16 +6,23 @@ import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import android.text.style.URLSpan
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.Placeholder
@@ -29,7 +36,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import app.pleromastisk.R
 import app.pleromastisk.data.Emoji
 import app.pleromastisk.data.Mention
 import coil.compose.AsyncImage
@@ -153,16 +162,49 @@ fun RichText(
     color: Color = PT.FgText,
     maxLines: Int = Int.MAX_VALUE,
     mentions: List<Mention> = emptyList(),
+    /** Tekst lengre enn dette kortes ned med en «Vis alt»-knapp (null = vis alt). */
+    collapseAfter: Int? = null,
 ) {
     val onHashtag = LocalHashtagClick.current
     val onProfile = LocalProfileLinkClick.current
     val (text, inline) = remember(html, emojis, onHashtag, mentions, onProfile) {
         htmlToRich(html, emojis, PT.Link, onHashtag, mentions, onProfile)
     }
-    Text(
-        text, modifier, style = style, color = color, maxLines = maxLines,
-        overflow = TextOverflow.Ellipsis, inlineContent = inline,
-    )
+    val cut = collapseAfter?.let { collapsePoint(text.text, it) }
+    if (cut == null) {
+        Text(
+            text, modifier, style = style, color = color, maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis, inlineContent = inline,
+        )
+        return
+    }
+    var expanded by rememberSaveable(html) { mutableStateOf(false) }
+    val shown = if (expanded) text else remember(text, cut) {
+        buildAnnotatedString { append(text.subSequence(0, cut)); append(" …") }
+    }
+    Column(modifier) {
+        Text(shown, style = style, color = color, inlineContent = inline)
+        PButton(
+            text = stringResource(if (expanded) R.string.read_less else R.string.read_more),
+            onClick = { expanded = !expanded },
+            modifier = Modifier.padding(top = 6.dp),
+        )
+    }
+}
+
+/** Grensen for når innlegg kortes ned med «Vis alt». */
+const val CollapseChars = 750
+
+/**
+ * Hvor en tekst lengre enn [limit] tegn skal kuttes: ved siste linjeskift eller mellomrom før grensen
+ * (så ord og emojikoder ikke deles), eller null når teksten er kort nok.
+ */
+fun collapsePoint(text: String, limit: Int): Int? {
+    if (text.length <= limit) return null
+    val nl = text.lastIndexOf('\n', limit)
+    if (nl >= limit * 2 / 3) return text.substring(0, nl).trimEnd().length
+    val sp = text.lastIndexOf(' ', limit)
+    return if (sp >= limit / 2) text.substring(0, sp).trimEnd().length else limit
 }
 
 /** Vanlig tekst (f.eks. visningsnavn) som kan inneholde :emoji:-koder. */

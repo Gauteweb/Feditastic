@@ -39,7 +39,7 @@ Her er noen skjermbilder som eksempler på hvordan appen ser ut. Den finnes per 
   bildet først og teksten under, som i Pixelfed og Instagram. Flere bilder blas sidelengs.
 
 **Navigasjon**
-- Bunnmeny: Hjem · Bilder · Varsler · Søk · Skriv · Profil. Hold inne en knapp for å skjule tekstene.
+- Bunnmeny: Hjem · Bilder · Varsler · Søk · Skriv · Profil. Hold inne et ikon for å se hva det heter.
 - Sveip mellom fanene. Dobbelttrykk på en fane for å oppdatere, eller på toppfeltet for å rulle til toppen.
 
 **Chat og annet**

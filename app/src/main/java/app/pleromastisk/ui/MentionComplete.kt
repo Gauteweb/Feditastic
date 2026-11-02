@@ -90,16 +90,13 @@ internal fun MentionSuggestions(accounts: List<Account>, onPick: (Account) -> Un
 }
 
 /**
- * Startteksten i et svar: nevnelsene øverst og emneknaggene fra innlegget nederst, med en tom linje
- * på hver side av markøren. Uten emneknagger blir det som før: «@a @b » med markøren til slutt.
+ * Startteksten i et svar: nevnelsene øverst og markøren på linjen rett under dem. Har innlegget
+ * emneknagger, kommer de nederst med en tom linje mellom markøren og knaggene.
  */
 internal fun replyDraft(mentions: String?, tags: String?): TextFieldValue {
     val head = mentions?.split(" ")?.filter { it.isNotBlank() }?.joinToString(" ") { "@$it" }.orEmpty()
     val tail = tags?.split(" ")?.filter { it.isNotBlank() }?.joinToString(" ") { "#$it" }.orEmpty()
-    if (tail.isEmpty()) {
-        val t = if (head.isEmpty()) "" else "$head "
-        return TextFieldValue(t, TextRange(t.length))
-    }
-    val before = if (head.isEmpty()) "" else "$head\n\n"
-    return TextFieldValue(before + "\n\n" + tail, TextRange(before.length))
+    val before = if (head.isEmpty()) "" else "$head\n"
+    val after = if (tail.isEmpty()) "" else "\n\n$tail"
+    return TextFieldValue(before + after, TextRange(before.length))
 }

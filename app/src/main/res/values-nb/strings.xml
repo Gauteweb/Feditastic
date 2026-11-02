@@ -121,6 +121,8 @@
     <string name="retry">Prøv igjen</string>
     <string name="boosted_by">%1$s delte</string>
     <string name="show_more">Vis</string>
+    <string name="read_more">Vis alt</string>
+    <string name="read_less">Vis mindre</string>
     <string name="show_less">Skjul</string>
     <string name="sensitive_media">Sensitivt innhold – trykk for å vise</string>
     <string name="audio_attachment">Lyd</string>

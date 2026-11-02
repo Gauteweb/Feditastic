@@ -57,6 +57,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.window.Popup
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -118,6 +122,7 @@ import app.pleromastisk.vm.StatusListViewModel
 import app.pleromastisk.vm.ThreadViewModel
 import app.pleromastisk.vm.TimelineViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val HOME = "home"
@@ -574,13 +579,18 @@ private fun PBottomBar(
     onDoubleTap: () -> Unit,
     onCompose: () -> Unit,
 ) {
-    // Hold inne en vilkårlig menyknapp for å skjule/vise tekstene under ikonene
-    var compact by remember { mutableStateOf(Graph.store.compactNav) }
+    // Bare ikoner; hold inne et ikon for å se hva det heter (forsvinner av seg selv etter litt)
+    var peek by remember { mutableStateOf<Int?>(null) }
+    LaunchedEffect(peek) {
+        if (peek != null) {
+            delay(1500)
+            peek = null
+        }
+    }
     val haptic = LocalHapticFeedback.current
-    val toggle = {
+    val showLabel = { label: Int ->
         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-        compact = !compact
-        Graph.store.compactNav = compact
+        peek = label
     }
     // Første trykk navigerer med en gang; et nytt trykk på samme knapp like etter er et dobbelttrykk
     val doubleTapTimeout = LocalViewConfiguration.current.doubleTapTimeoutMillis
@@ -602,12 +612,12 @@ private fun PBottomBar(
             Modifier.fillMaxWidth().navigationBarsPadding().height(58.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            NavItem(Icons.Filled.Home, R.string.nav_home, route == HOME, compact, toggle) { tap(HOME) }
-            NavItem(Icons.Filled.Image, R.string.nav_media, route == MEDIA, compact, toggle) { tap(MEDIA) }
-            NavItem(Icons.Filled.Notifications, R.string.nav_notifications, route == NOTIFICATIONS, compact, toggle) {
+            NavItem(Icons.Filled.Home, R.string.nav_home, route == HOME, peek == R.string.nav_home, { showLabel(R.string.nav_home) }) { tap(HOME) }
+            NavItem(Icons.Filled.Image, R.string.nav_media, route == MEDIA, peek == R.string.nav_media, { showLabel(R.string.nav_media) }) { tap(MEDIA) }
+            NavItem(Icons.Filled.Notifications, R.string.nav_notifications, route == NOTIFICATIONS, peek == R.string.nav_notifications, { showLabel(R.string.nav_notifications) }) {
                 tap(NOTIFICATIONS)
             }
-            NavItem(Icons.Filled.Search, R.string.nav_search, route == SEARCH, compact, toggle) { tap(SEARCH) }
+            NavItem(Icons.Filled.Search, R.string.nav_search, route == SEARCH, peek == R.string.nav_search, { showLabel(R.string.nav_search) }) { tap(SEARCH) }
             // «Skriv nytt innlegg»: fremhevet knapp midt i linjen
             Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 Box(
@@ -615,13 +625,14 @@ private fun PBottomBar(
                         .size(46.dp)
                         .background(PT.Link)
                         .border(1.dp, PT.Border)
-                        .combinedClickable(onLongClick = toggle, onClick = onCompose),
+                        .combinedClickable(onLongClick = { showLabel(R.string.nav_compose) }, onClick = onCompose),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(Icons.Filled.Edit, stringResource(R.string.nav_compose), tint = PT.Fg)
+                    if (peek == R.string.nav_compose) NavLabel(R.string.nav_compose, above = 58.dp)
                 }
             }
-            NavItem(Icons.Filled.Person, R.string.nav_profile, route == PROFILE, compact, toggle) { tap(PROFILE) }
+            NavItem(Icons.Filled.Person, R.string.nav_profile, route == PROFILE, peek == R.string.nav_profile, { showLabel(R.string.nav_profile) }) { tap(PROFILE) }
         }
     }
 }
@@ -632,7 +643,7 @@ private fun RowScope.NavItem(
     icon: ImageVector,
     label: Int,
     selected: Boolean,
-    compact: Boolean,
+    showLabel: Boolean,
     onLongClick: () -> Unit,
     onClick: () -> Unit,
 ) {
@@ -646,9 +657,31 @@ private fun RowScope.NavItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
     ) {
-        Icon(icon, stringResource(label), tint = tint, modifier = Modifier.size(24.dp))
-        // Uten tekst står ikonet alene, midt mellom topp- og bunnkanten
-        if (!compact) Text(stringResource(label), color = tint, fontSize = 10.sp, maxLines = 1)
+        Box(contentAlignment = Alignment.Center) {
+            Icon(icon, stringResource(label), tint = tint, modifier = Modifier.size(24.dp))
+            if (showLabel) NavLabel(label, above = 47.dp)
+        }
+    }
+}
+
+/**
+ * Navnet på en menyknapp, vist i en liten boks rett over menylinjen etter et langt trykk.
+ * [above] er avstanden fra bunnen av ikonet til litt over toppen av linjen.
+ */
+@Composable
+private fun NavLabel(label: Int, above: Dp) {
+    Popup(
+        alignment = Alignment.BottomCenter,
+        offset = with(LocalDensity.current) { IntOffset(0, -above.roundToPx()) },
+    ) {
+        Text(
+            stringResource(label),
+            color = PT.Fg, fontSize = 13.sp, fontWeight = FontWeight.Bold, maxLines = 1,
+            modifier = Modifier
+                .background(PT.Link)
+                .border(1.dp, PT.Border)
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+        )
     }
 }
 

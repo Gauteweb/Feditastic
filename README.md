@@ -39,7 +39,7 @@ Here are some screenshots showing what the app looks like. It is currently only 
   the image first and the text below, like in Pixelfed and Instagram. Multiple images are swiped sideways.
 
 **Navigation**
-- Bottom bar: Home · Media · Alerts · Search · Write · Profile. Long-press a button to hide the labels.
+- Bottom bar: Home · Media · Alerts · Search · Write · Profile. Long-press an icon to see its name.
 - Swipe between tabs. Double-tap a tab to refresh, or the top bar to scroll to the top.
 
 **Chat and more**
