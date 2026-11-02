@@ -1,0 +1,3 @@
+- Replies start on the line right below the mentioned usernames
+- Posts longer than 750 characters are shortened with a "Show all" button
+- The bottom bar shows only icons; long-press an icon to see its name

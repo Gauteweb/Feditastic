@@ -1,0 +1,3 @@
+- Svar starter på linjen rett under brukernavnene du nevner
+- Innlegg over 750 tegn kortes ned med en «Vis alt»-knapp
+- Bunnmenyen viser bare ikoner; hold inne et ikon for å se hva det heter
