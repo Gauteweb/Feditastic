@@ -1,0 +1,2 @@
+- Typing @ followed by a name suggests accounts you follow
+- Replies to posts with hashtags include the hashtags at the bottom, with the cursor on an empty line above them

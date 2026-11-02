@@ -1,0 +1,2 @@
+- Skriver du @ og et navn, foreslås kontoer du følger
+- Svar på innlegg med emneknagger får med knaggene nederst, med markøren på en tom linje over dem
