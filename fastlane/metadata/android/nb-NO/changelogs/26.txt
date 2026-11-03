@@ -1,0 +1,2 @@
+- Helsestatus for Pleroma-tjenere: et hjerteikon på Lokal feed viser tjenerens helse, databasetilkoblinger, minnebruk og jobbkøer (bare når tjeneren har helsesjekken slått på)
+- Fremhev et innlegg på profilen, eller fjern fremhevingen, fra «…»-menyen på din egen profil

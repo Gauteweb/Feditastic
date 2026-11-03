@@ -1,0 +1,2 @@
+- Health status for Pleroma servers: a heart icon on the Local feed shows the server's health, database connections, memory use and job queues (only when the server has its health check enabled)
+- Pin a post to your profile, or unpin it, from the "…" menu on your own profile
