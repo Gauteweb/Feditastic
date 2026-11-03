@@ -3,6 +3,7 @@ package app.pleromastisk.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.pleromastisk.Graph
+import app.pleromastisk.R
 import app.pleromastisk.data.Account
 import app.pleromastisk.data.MastoList
 import app.pleromastisk.data.Notification
@@ -55,6 +56,10 @@ abstract class StatusListViewModel : ViewModel() {
     fun toggleFavourite(s: Status) = launchAction { replaceStatus(Graph.api.favourite(s.id, !s.favourited)) }
     fun toggleBoost(s: Status) = launchAction { replaceStatus(Graph.api.reblog(s.id, !s.reblogged)) }
     fun toggleBookmark(s: Status) = launchAction { replaceStatus(Graph.api.bookmark(s.id, !s.bookmarked)) }
+    fun togglePin(s: Status) = launchAction {
+        replaceStatus(Graph.api.pin(s.id, !s.pinned))
+        Graph.toast(Graph.str(if (s.pinned) R.string.unpinned else R.string.pinned))
+    }
 
     fun vote(owner: Status, poll: Poll, choices: List<Int>) = launchAction {
         val updated = Graph.api.vote(poll.id, choices)

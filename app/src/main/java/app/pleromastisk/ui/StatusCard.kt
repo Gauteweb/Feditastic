@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Reply
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -91,7 +92,12 @@ class StatusActions(
     val onDelete: (Status) -> Unit,
     val canEdit: Boolean = false,
     val onEdit: (Status) -> Unit = {},
+    /** Fremhev / fjern fremheving. Bare satt på brukerens egen profilside. */
+    val onPin: ((Status) -> Unit)? = null,
 )
+
+/** Mastodon og Pleroma lar bare offentlige og ulistede innlegg fremheves. */
+private fun Status.pinnable() = visibility == "public" || visibility == "unlisted"
 
 @Composable
 fun Avatar(url: String, size: Int, modifier: Modifier = Modifier) {
@@ -162,6 +168,14 @@ fun StatusCard(
                         color = PT.Muted,
                         maxLines = 1,
                     )
+                }
+            }
+
+            if (actions.onPin != null && status.reblog == null && s.pinned) {
+                Row(Modifier.padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Filled.PushPin, null, tint = PT.Link, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.pinned_label), style = MaterialTheme.typography.bodySmall, color = PT.Muted)
                 }
             }
 
@@ -499,6 +513,13 @@ private fun MoreMenu(s: Status, actions: StatusActions) {
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.action_edit)) },
                     onClick = { open = false; actions.onEdit(s) },
+                )
+            }
+            val onPin = actions.onPin
+            if (onPin != null && actions.myId != null && actions.myId == s.account.id && s.pinnable()) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(if (s.pinned) R.string.action_unpin else R.string.action_pin)) },
+                    onClick = { open = false; onPin(s) },
                 )
             }
             if (actions.myId != null && actions.myId == s.account.id) {

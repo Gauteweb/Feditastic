@@ -144,6 +144,22 @@ class ApiClient(private val store: SessionStore) {
         }
 
     /**
+     * Pleromas helsesjekk. En usunn tjener svarer med 503 men samme innhold, så det leses også.
+     * Gir null når sjekken er slått av eller ikke finnes på tjeneren.
+     */
+    suspend fun healthcheck(): Healthcheck? = withContext(Dispatchers.IO) {
+        http.newCall(builder("/api/pleroma/healthcheck", auth = false).get().build()).execute().use { r ->
+            val body = r.body?.string().orEmpty()
+            when {
+                r.isSuccessful || r.code == 503 ->
+                    runCatching { json.decodeFromString<Healthcheck>(body) }.getOrNull()?.takeIf { it.healthy != null }
+                r.code == 404 -> null
+                else -> throw ApiException(r.code, errorMessage(body) ?: "HTTP ${r.code}")
+            }
+        }
+    }
+
+    /**
      * Innholdet Mastodon viser på /about (der siden lages med JavaScript): den lange beskrivelsen og
      * serverreglene. Endepunkter instansen ikke har (404 o.l.) gir tomt svar.
      */
@@ -238,6 +254,10 @@ class ApiClient(private val store: SessionStore) {
 
     suspend fun bookmark(id: String, on: Boolean): Status =
         post("/api/v1/statuses/$id/${if (on) "bookmark" else "unbookmark"}")
+
+    /** Fremhever (fester) et eget innlegg på profilen, eller fjerner fremhevingen. */
+    suspend fun pin(id: String, on: Boolean): Status =
+        post("/api/v1/statuses/$id/${if (on) "pin" else "unpin"}")
 
     suspend fun deleteStatus(id: String) {
         exec(builder("/api/v1/statuses/$id").delete().build()) { }

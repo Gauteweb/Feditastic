@@ -63,6 +63,27 @@
     <string name="instance_about_rules">Serverregler</string>
     <string name="instance_about_contact">Administrert av</string>
 
+    <!-- Helsestatus (Pleroma) -->
+    <string name="health_button">Helsestatus</string>
+    <string name="health_title">Helsestatus</string>
+    <string name="health_ok">Tjeneren er frisk</string>
+    <string name="health_bad">Tjeneren har problemer</string>
+    <string name="health_disabled">Helsesjekken er slått av på denne tjeneren.</string>
+    <string name="health_refresh">Oppdater</string>
+    <string name="health_db">Databasetilkoblinger</string>
+    <string name="health_db_value">%1$d aktive, %2$d ledige</string>
+    <string name="health_db_pool">%1$d maks</string>
+    <string name="health_memory">Minnebruk</string>
+    <string name="health_jobs">Jobbkøer</string>
+    <string name="health_jobs_hint">Siden tjeneren sist startet: jobber som gikk bra (✓) og som feilet (✗).</string>
+    <string name="health_jobs_total">Jobber totalt</string>
+    <string name="health_queue_incoming">Innkommende føderering</string>
+    <string name="health_queue_outgoing">Utgående føderering</string>
+    <string name="health_queue_background">Bakgrunn</string>
+    <string name="health_queue_search">Søkeindeksering</string>
+    <string name="health_queue_push">Pushvarsler</string>
+    <string name="health_queue_slow">Trege jobber</string>
+
     <!-- Alt-tekst og redigering -->
     <string name="alt_title">Alt-tekst</string>
     <string name="alt_none">Ingen alt-tekst er lagt inn for dette bildet.</string>
@@ -142,6 +163,11 @@
     <string name="action_copy_link">Kopier lenke</string>
     <string name="action_delete">Slett</string>
     <string name="link_copied">Lenken er kopiert</string>
+    <string name="action_pin">Fremhev på profilen</string>
+    <string name="action_unpin">Fjern fremheving</string>
+    <string name="pinned">Innlegget er fremhevet på profilen</string>
+    <string name="unpinned">Fremhevingen er fjernet</string>
+    <string name="pinned_label">Fremhevet</string>
     <string name="delete_confirm_title">Slette innlegget?</string>
     <string name="delete_confirm_text">Dette kan ikke angres.</string>
     <string name="cancel">Avbryt</string>

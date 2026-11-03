@@ -156,6 +156,8 @@ data class Status(
     val favourited: Boolean = false,
     val reblogged: Boolean = false,
     val bookmarked: Boolean = false,
+    /** Fremhevet (festet) på profilen. Oppgis bare for brukerens egne innlegg. */
+    val pinned: Boolean = false,
     val poll: Poll? = null,
     val card: Card? = null,
     @SerialName("edited_at") val editedAt: String? = null,
@@ -302,4 +304,32 @@ data class PleromaInfo(val metadata: PleromaMetadata? = null)
 @Serializable
 data class PleromaMetadata(@SerialName("post_formats") val postFormats: List<String> = emptyList(),
     val features: List<String> = emptyList(),
+)
+
+/**
+ * /api/pleroma/healthcheck: Pleromas egen helsesjekk. [healthy] mangler når administratoren har slått
+ * sjekken av (svaret er da bare `{}`). Minnebruken er i MB; jobbtallene gjelder siden tjeneren startet.
+ */
+@Serializable
+data class Healthcheck(
+    val healthy: Boolean? = null,
+    /** Databasetilkoblinger i bruk og ledige. */
+    val active: Int = 0,
+    val idle: Int = 0,
+    @SerialName("pool_size") val poolSize: Int? = null,
+    @SerialName("memory_used") val memoryUsed: Double? = null,
+    @SerialName("job_queue_stats") val jobQueueStats: JobQueueStats? = null,
+)
+
+@Serializable
+data class JobQueueStats(
+    @SerialName("processed_jobs") val processedJobs: Long = 0,
+    val queues: Map<String, JobStats> = emptyMap(),
+)
+
+@Serializable
+data class JobStats(
+    val success: Long = 0,
+    val failure: Long = 0,
+    @SerialName("processed_jobs") val processedJobs: Long = 0,
 )

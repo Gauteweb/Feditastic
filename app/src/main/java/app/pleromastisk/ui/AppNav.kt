@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MonitorHeart
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.People
@@ -65,6 +66,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -224,6 +226,12 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
     var showThemes by rememberSaveable { mutableStateOf(false) }
     var showMediaInfo by rememberSaveable { mutableStateOf(false) }
     var showChatInfo by rememberSaveable { mutableStateOf(false) }
+    var showHealth by rememberSaveable { mutableStateOf(false) }
+    // Ikke alle Pleroma-tjenere har helsesjekken slått på: knappen vises bare når den svarer med en status
+    val healthAvailable by produceState(false, state.activeKey, state.isPleroma) {
+        value = false
+        if (state.isPleroma) value = runCatching { Graph.api.healthcheck() != null }.getOrDefault(false)
+    }
     val feedId = if (route == MEDIA) mediaListId else selectedListId
 
     fun go(target: String) = nav.navigate(target) {
@@ -232,7 +240,8 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
         restoreState = true
     }
 
-    fun actionsFor(vm: StatusListViewModel) = StatusActions(
+    /** [pin]: fremheving i «…»-menyen, bare på brukerens egen profilside. */
+    fun actionsFor(vm: StatusListViewModel, pin: Boolean = false) = StatusActions(
         myId = me?.id,
         onOpenStatus = { nav.navigate("thread/${it.id}") },
         onOpenProfile = { nav.navigate("account/${it.id}") },
@@ -244,11 +253,13 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
         onDelete = vm::delete,
         canEdit = state.canEdit,
         onEdit = { nav.navigate("compose?editId=${Uri.encode(it.id)}") },
+        onPin = if (pin) vm::togglePin else null,
     )
 
     if (showAbout) AboutDialog(onDismiss = { showAbout = false })
     if (showThemes) ThemePickerDialog(onDismiss = { showThemes = false })
     if (showMediaInfo) InfoDialog(R.string.title_media, R.string.media_info_text, onDismiss = { showMediaInfo = false })
+    if (showHealth) HealthDialog(onDismiss = { showHealth = false })
     if (showChatInfo) InfoDialog(R.string.title_chat, R.string.chat_info_text, onDismiss = { showChatInfo = false })
     if (showSwitcher) {
         AccountSwitchDialog(
@@ -312,6 +323,12 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
                     actions = {
                         if (route == NOTIFICATIONS) entry?.let { NewNotificationsBadge(viewModel(it)) }
                         if (route == HOME && selectedListId == LOCAL_FEED) {
+                            // Helsestatusen til tjeneren (/api/pleroma/healthcheck), bare på Pleroma med sjekken på
+                            if (healthAvailable) {
+                                IconButton(onClick = { showHealth = true }) {
+                                    Icon(Icons.Filled.MonitorHeart, stringResource(R.string.health_button), tint = PT.TopBarText)
+                                }
+                            }
                             // «Om»-siden til instansen brukeren er logget inn på: Pleromas panel.html og
                             // tjenestevilkår, eller Mastodons beskrivelse og regler fra API-et
                             TextButton(onClick = { nav.navigate(INSTANCE_ABOUT) }) {
@@ -436,7 +453,7 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
                         factory = viewModelFactory { initializer { AccountViewModel(me.id) } },
                     )
                     AccountScreen(
-                        me.id, true, vm, actionsFor(vm),
+                        me.id, true, vm, actionsFor(vm, pin = true),
                         onLogout = { auth.logout() },
                         onSwitchAccount = { showSwitcher = true },
                     )
@@ -467,7 +484,7 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
                     factory = viewModelFactory { initializer { AccountViewModel(id) } },
                 )
                 AccountScreen(
-                    id, id == me?.id, vm, actionsFor(vm),
+                    id, id == me?.id, vm, actionsFor(vm, pin = id == me?.id),
                     onLogout = { auth.logout() },
                     onSwitchAccount = { showSwitcher = true },
                 )

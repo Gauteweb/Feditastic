@@ -63,6 +63,27 @@
     <string name="instance_about_rules">Server rules</string>
     <string name="instance_about_contact">Administered by</string>
 
+    <!-- Health status (Pleroma) -->
+    <string name="health_button">Health status</string>
+    <string name="health_title">Health status</string>
+    <string name="health_ok">The server is healthy</string>
+    <string name="health_bad">The server has problems</string>
+    <string name="health_disabled">The health check is disabled on this server.</string>
+    <string name="health_refresh">Refresh</string>
+    <string name="health_db">Database connections</string>
+    <string name="health_db_value">%1$d active, %2$d idle</string>
+    <string name="health_db_pool">%1$d max</string>
+    <string name="health_memory">Memory used</string>
+    <string name="health_jobs">Job queues</string>
+    <string name="health_jobs_hint">Since the server last started: jobs that succeeded (✓) and failed (✗).</string>
+    <string name="health_jobs_total">Total jobs</string>
+    <string name="health_queue_incoming">Incoming federation</string>
+    <string name="health_queue_outgoing">Outgoing federation</string>
+    <string name="health_queue_background">Background</string>
+    <string name="health_queue_search">Search indexing</string>
+    <string name="health_queue_push">Push notifications</string>
+    <string name="health_queue_slow">Slow jobs</string>
+
     <!-- Alt text and editing -->
     <string name="alt_title">Alt text</string>
     <string name="alt_none">No alt text has been added for this image.</string>
@@ -142,6 +163,11 @@
     <string name="action_copy_link">Copy link</string>
     <string name="action_delete">Delete</string>
     <string name="link_copied">Link copied</string>
+    <string name="action_pin">Pin to profile</string>
+    <string name="action_unpin">Unpin from profile</string>
+    <string name="pinned">The post is pinned to your profile</string>
+    <string name="unpinned">The post is unpinned</string>
+    <string name="pinned_label">Pinned</string>
     <string name="delete_confirm_title">Delete the post?</string>
     <string name="delete_confirm_text">This cannot be undone.</string>
     <string name="cancel">Cancel</string>

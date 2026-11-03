@@ -80,4 +80,19 @@ class ModelsTest {
         val s = json.decodeFromString<Status>(status(""","application":{"name":null,"website":null}"""))
         assertEquals("", s.application?.name)
     }
+
+    @Test fun leserHelsesjekk() {
+        val h = json.decodeFromString<Healthcheck>(
+            """{"active":1,"idle":9,"pool_size":null,"memory_used":255.41,"healthy":true,
+                "job_queue_stats":{"processed_jobs":2316,"queues":{
+                  "federator_incoming":{"success":32,"failure":191,"processed_jobs":223}}}}""",
+        )
+        assertEquals(true, h.healthy)
+        assertEquals(9, h.idle)
+        assertNull(h.poolSize)
+        assertEquals(2316L, h.jobQueueStats?.processedJobs)
+        assertEquals(191L, h.jobQueueStats?.queues?.get("federator_incoming")?.failure)
+        // Slått av på tjeneren: svaret er bare {}
+        assertNull(json.decodeFromString<Healthcheck>("{}").healthy)
+    }
 }
