@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -28,6 +31,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
@@ -375,7 +379,10 @@ fun ComposeScreen(
                 }
                 if (markdown && markdownSupported) {
                     // Knapper som setter inn Markdown-koder der markøren står
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(
+                        Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
                         listOf(
                             Triple("#", R.string.md_btn_heading) { applyMarkdown { t, a, b -> prefixLines(t, a, b, "# ") } },
                             Triple("**", R.string.md_bold) { applyMarkdown { t, a, b -> wrapMarkdown(t, a, b, "**") } },
@@ -387,9 +394,15 @@ fun ComposeScreen(
                             val d = stringResource(desc)
                             PButton(
                                 text = label, onClick = action,
-                                modifier = Modifier.weight(1f).semantics { contentDescription = d },
+                                modifier = Modifier.weight(1f).fillMaxHeight().semantics { contentDescription = d },
                             )
                         }
+                        PButton(
+                            text = "", icon = Icons.Filled.Link,
+                            description = stringResource(R.string.md_link),
+                            onClick = { applyMarkdown(::insertLink) },
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
+                        )
                     }
                 }
                 OutlinedTextField(

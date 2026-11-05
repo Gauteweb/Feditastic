@@ -23,4 +23,9 @@ class MarkdownInsertTest {
         assertEquals(MdEdit("> a\n> b\nc", 2, 7), prefixLines("a\nb\nc", 0, 3, "> "))
 
     @Test fun sitatITomTekst() = assertEquals(MdEdit("> ", 2, 2), prefixLines("", 0, 0, "> "))
+
+    @Test fun lenkeUtenMarkering() = assertEquals(MdEdit("se []()", 4, 4), insertLink("se ", 3, 3))
+
+    @Test fun lenkeMedMarkeringGirMarkoerIParentes() =
+        assertEquals(MdEdit("se [her]() nå", 9, 9), insertLink("se her nå", 3, 6))
 }

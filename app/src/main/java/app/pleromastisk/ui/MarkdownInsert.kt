@@ -41,3 +41,16 @@ internal fun prefixLines(text: String, selStart: Int, selEnd: Int, prefix: Strin
     }
     return MdEdit(sb.toString(), newStart, newEnd)
 }
+
+/**
+ * Setter inn en Markdown-lenke. Uten markering blir det «[]()» med markøren i hakeparentesene;
+ * med markering blir den lenketeksten, og markøren havner i parentesene, klar for adressen.
+ */
+internal fun insertLink(text: String, selStart: Int, selEnd: Int): MdEdit {
+    val start = minOf(selStart, selEnd).coerceIn(0, text.length)
+    val end = maxOf(selStart, selEnd).coerceIn(0, text.length)
+    val label = text.substring(start, end)
+    val out = text.substring(0, start) + "[" + label + "]()" + text.substring(end)
+    val cursor = if (label.isEmpty()) start + 1 else start + label.length + 3
+    return MdEdit(out, cursor, cursor)
+}
