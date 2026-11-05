@@ -1,0 +1,1 @@
+- Link button among the Markdown buttons on the new post screen: inserts [](), and selected text becomes the link text

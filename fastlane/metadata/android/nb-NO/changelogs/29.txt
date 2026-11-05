@@ -1,0 +1,1 @@
+- Lenke-knapp blant Markdown-knappene på skriveskjermen: setter inn [](), og markert tekst blir lenketekst
