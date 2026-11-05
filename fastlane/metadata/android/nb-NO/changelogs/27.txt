@@ -1,0 +1,4 @@
+- Bedre Markdown i innlegg: punktlister og nummererte lister med innrykk, kode i teksten og kodeblokker, sitater og overskrifter
+- Markdown-hjelp: en info-knapp på skriveskjermen viser de vanligste Markdown-kodene når Markdown er slått på
+- Snarveien «Nytt innlegg» ved langt trykk på app-ikonet
+- «Kun media» på en profil vises som bilde-feed

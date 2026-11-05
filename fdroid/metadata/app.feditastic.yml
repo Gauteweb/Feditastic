@@ -40,7 +40,14 @@ Builds:
     gradle:
       - yes
 
+  - versionName: 2.2.8
+    versionCode: 27
+    commit: v2.2.8
+    subdir: app
+    gradle:
+      - yes
+
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 2.2.7
-CurrentVersionCode: 26
+CurrentVersion: 2.2.8
+CurrentVersionCode: 27

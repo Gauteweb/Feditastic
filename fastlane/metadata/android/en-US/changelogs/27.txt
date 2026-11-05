@@ -1,0 +1,4 @@
+- Better Markdown in posts: bulleted and numbered lists with indentation, inline code and code blocks, quotes and headings
+- Markdown help: an info button on the new post screen lists the most common Markdown codes when Markdown is on
+- "New post" shortcut when you long-press the app icon
+- "Media only" on a profile is shown as an image feed
