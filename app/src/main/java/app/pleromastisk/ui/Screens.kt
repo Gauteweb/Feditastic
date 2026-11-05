@@ -500,7 +500,10 @@ fun AccountScreen(
     val mediaOnly by vm.mediaOnly.collectAsStateWithLifecycle()
     LaunchedEffect(accountId) { vm.loadHeader(isMe) }
 
-    StatusFeed(vm, actions, modifier, header = {
+    // «Kun media» vises som bilde-feed, slik som fanen «Bilder og video»
+    StatusFeed(vm, actions, modifier, card = { s, a ->
+        if (mediaOnly) MediaPostCard(s, a) else StatusCard(s, a)
+    }, header = {
         item {
             account?.let { a ->
                 Panel {

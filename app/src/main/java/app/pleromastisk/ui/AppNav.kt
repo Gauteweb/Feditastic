@@ -124,6 +124,7 @@ import app.pleromastisk.vm.StatusListViewModel
 import app.pleromastisk.vm.ThreadViewModel
 import app.pleromastisk.vm.TimelineViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -140,6 +141,14 @@ private const val CHAT = "chat"
 private const val COMPOSE_BASE = "compose"
 private const val COMPOSE =
     "compose?replyId={replyId}&replyMentions={replyMentions}&replyTags={replyTags}&replyVis={replyVis}&editId={editId}"
+
+/**
+ * Snarveien «Nytt innlegg» (langt trykk på app-ikonet) setter denne; hovedskjermen åpner
+ * skriveskjermen når en bruker er logget inn, og nullstiller den.
+ */
+object PendingCompose {
+    val requested = MutableStateFlow(false)
+}
 
 private val TopLevel = setOf(HOME, MEDIA, NOTIFICATIONS, SEARCH, PROFILE)
 
@@ -269,6 +278,15 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
             onAdd = { showSwitcher = false; auth.startAddingAccount() },
             onDismiss = { showSwitcher = false },
         )
+    }
+
+    // Snarveien «Nytt innlegg»: åpne skriveskjermen (om den ikke allerede er åpen)
+    LaunchedEffect(nav) {
+        PendingCompose.requested.collect { requested ->
+            if (!requested) return@collect
+            PendingCompose.requested.value = false
+            if (nav.currentDestination?.route?.startsWith(COMPOSE_BASE) != true) nav.navigate(COMPOSE_BASE)
+        }
     }
 
     // Dobbelttrykk på tomt område i toppfeltet ruller listen på skjermen til toppen

@@ -29,6 +29,11 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="oauth" android:scheme="feditastic" />
             </intent-filter>
+
+            <!-- Snarveien «Nytt innlegg» ved langt trykk på app-ikonet -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
     </application>
 </manifest>

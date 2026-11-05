@@ -9,6 +9,8 @@
     <string name="nav_search">Søk</string>
     <string name="nav_media">Bilder</string>
     <string name="nav_compose">Skriv</string>
+    <string name="shortcut_compose">Nytt innlegg</string>
+    <string name="shortcut_compose_long">Skriv et nytt innlegg</string>
     <string name="nav_notifications">Varsler</string>
     <string name="nav_profile">Profil</string>
     <string name="title_home">Hjem</string>

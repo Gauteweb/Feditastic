@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import app.pleromastisk.ui.AppTheme
 import app.pleromastisk.ui.PT
+import app.pleromastisk.ui.PendingCompose
 import app.pleromastisk.ui.PleromastiskRoot
 import app.pleromastisk.ui.PleromastiskTheme
 import app.pleromastisk.vm.AuthViewModel
@@ -76,6 +77,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handle(intent: Intent?) {
+        if (intent?.action == ACTION_COMPOSE) PendingCompose.requested.value = true
         intent?.data?.let { auth.handleRedirect(it) }
+    }
+
+    companion object {
+        /** Snarveien «Nytt innlegg» (res/xml/shortcuts.xml). */
+        const val ACTION_COMPOSE = "app.feditastic.action.COMPOSE"
     }
 }
