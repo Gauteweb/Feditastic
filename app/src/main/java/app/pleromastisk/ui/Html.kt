@@ -1,11 +1,5 @@
 package app.pleromastisk.ui
 
-import android.graphics.Typeface
-import android.text.Html
-import android.text.style.StrikethroughSpan
-import android.text.style.StyleSpan
-import android.text.style.TypefaceSpan
-import android.text.style.URLSpan
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
@@ -34,7 +29,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -57,27 +54,29 @@ fun htmlToRich(
     val cleaned = html
         .replace(Regex("<span class=\"invisible\">.*?</span>", RegexOption.DOT_MATCHES_ALL), "")
         .replace(Regex("<span class=\"ellipsis\">(.*?)</span>", RegexOption.DOT_MATCHES_ALL), "\$1…")
-    val spanned = Html.fromHtml(cleaned, Html.FROM_HTML_MODE_LEGACY)
-    val plain = spanned.toString().trimEnd()
+    val parsed = parseHtml(cleaned).withParagraphBreaks()
+    val plain = parsed.text
+    val codeBg = linkColor.copy(alpha = 0.14f)
     val base = buildAnnotatedString {
         append(plain)
-        for (span in spanned.getSpans(0, spanned.length, Any::class.java)) {
-            val start = spanned.getSpanStart(span).coerceIn(0, plain.length)
-            val end = spanned.getSpanEnd(span).coerceIn(0, plain.length)
-            if (end <= start) continue
-            when (span) {
-                is URLSpan -> {
+        for (ind in parsed.indents) {
+            addStyle(ParagraphStyle(textIndent = TextIndent(ind.first.em, ind.rest.em)), ind.start, ind.end)
+        }
+        for ((mark, start, end) in parsed.marks) {
+            when (mark) {
+                is HtmlMark.Link -> {
                     val style = TextLinkStyles(SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline))
+                    val url = mark.url
                     val linkText = plain.substring(start, end)
-                    val tag = hashtagFromLink(span.url, linkText)
-                    if (tag == null && (linkText.startsWith("@") || mentions.any { it.url == span.url })) {
+                    val tag = hashtagFromLink(url, linkText)
+                    if (tag == null && (linkText.startsWith("@") || mentions.any { it.url == url })) {
                         // @omtaler åpner profilen i appen (via egen instans) i stedet for nettsiden
-                        val id = mentionFor(span.url, linkText, mentions)?.id
+                        val id = mentionFor(url, linkText, mentions)?.id
                         addLink(
                             LinkAnnotation.Clickable(
-                                tag = "mention:${span.url}",
+                                tag = "mention:$url",
                                 styles = style,
-                                linkInteractionListener = { onProfile(id, span.url) },
+                                linkInteractionListener = { onProfile(id, url) },
                             ),
                             start, end,
                         )
@@ -92,20 +91,26 @@ fun htmlToRich(
                             start, end,
                         )
                     } else {
-                        addLink(LinkAnnotation.Url(span.url, style), start, end)
+                        addLink(LinkAnnotation.Url(url, style), start, end)
                     }
                 }
-                is StyleSpan -> when (span.style) {
-                    Typeface.BOLD -> addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
-                    Typeface.ITALIC -> addStyle(SpanStyle(fontStyle = FontStyle.Italic), start, end)
-                    Typeface.BOLD_ITALIC -> addStyle(
-                        SpanStyle(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic), start, end,
-                    )
-                }
-                is TypefaceSpan -> if (span.family == "monospace") {
-                    addStyle(SpanStyle(fontFamily = FontFamily.Monospace, background = Color(0x33000000)), start, end)
-                }
-                is StrikethroughSpan -> addStyle(SpanStyle(textDecoration = TextDecoration.LineThrough), start, end)
+                HtmlMark.Bold -> addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
+                HtmlMark.Italic -> addStyle(SpanStyle(fontStyle = FontStyle.Italic), start, end)
+                HtmlMark.Strike -> addStyle(SpanStyle(textDecoration = TextDecoration.LineThrough), start, end)
+                HtmlMark.Underline -> addStyle(SpanStyle(textDecoration = TextDecoration.Underline), start, end)
+                HtmlMark.Code, HtmlMark.CodeBlock ->
+                    addStyle(SpanStyle(fontFamily = FontFamily.Monospace, fontSize = 0.92.em, background = codeBg), start, end)
+                HtmlMark.Quote -> addStyle(SpanStyle(fontStyle = FontStyle.Italic), start, end)
+                HtmlMark.Marker -> addStyle(SpanStyle(color = linkColor, fontWeight = FontWeight.Bold), start, end)
+                HtmlMark.Sup -> addStyle(SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 0.75.em), start, end)
+                HtmlMark.Sub -> addStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.75.em), start, end)
+                is HtmlMark.Heading -> addStyle(
+                    SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = when (mark.level) { 1 -> 1.3.em; 2 -> 1.2.em; 3 -> 1.1.em; else -> 1.em },
+                    ),
+                    start, end,
+                )
             }
         }
     }

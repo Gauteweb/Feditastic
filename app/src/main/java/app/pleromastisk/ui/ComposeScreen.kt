@@ -27,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
@@ -35,6 +36,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -132,6 +134,7 @@ fun ComposeScreen(
     var cw by rememberSaveable { mutableStateOf("") }
     var visibility by rememberSaveable { mutableStateOf(replyVisibility ?: "public") }
     var markdown by rememberSaveable { mutableStateOf(false) }
+    var showMarkdownHelp by rememberSaveable { mutableStateOf(false) }
     // Språk: nye innlegg starter med sist brukte valg. Ved redigering brukes innleggets eget språk
     // (null hvis det er et annet språk enn de tre vi tilbyr – da endres det ikke).
     var language by rememberSaveable { mutableStateOf<String?>(if (editId != null) null else Graph.store.language) }
@@ -302,6 +305,8 @@ fun ComposeScreen(
         }
     }
 
+    if (showMarkdownHelp) MarkdownHelpDialog(onDismiss = { showMarkdownHelp = false })
+
     altTarget?.let { target ->
         AltTextDialog(
             attachment = target,
@@ -314,18 +319,26 @@ fun ComposeScreen(
     Column(Modifier.fillMaxSize().imePadding()) {
         // Topp: tittel
         Column(Modifier.fillMaxWidth().background(PT.TopBar).statusBarsPadding()) {
-            Text(
-                stringResource(
-                    when {
-                        editing -> R.string.compose_edit_title
-                        replyId != null -> R.string.compose_reply_title
-                        else -> R.string.compose_title
-                    },
-                ),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
-                color = PT.TopBarText, fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleLarge,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(
+                        when {
+                            editing -> R.string.compose_edit_title
+                            replyId != null -> R.string.compose_reply_title
+                            else -> R.string.compose_title
+                        },
+                    ),
+                    modifier = Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 14.dp),
+                    color = PT.TopBarText, fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                // Hjelp til Markdown vises bare når Markdown er slått på
+                if (markdown && markdownSupported) {
+                    IconButton(onClick = { showMarkdownHelp = true }, modifier = Modifier.padding(end = 4.dp)) {
+                        Icon(Icons.Filled.Info, stringResource(R.string.markdown_help_button), tint = PT.TopBarText)
+                    }
+                }
+            }
             HorizontalDivider(color = PT.Border)
         }
 
@@ -584,6 +597,56 @@ private fun AltTextDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel), color = PT.Link) }
+        },
+    )
+}
+
+/** Oversikt over de vanligste Markdown-kodene. */
+@Composable
+private fun MarkdownHelpDialog(onDismiss: () -> Unit) {
+    val items = listOf(
+        R.string.md_heading_syntax to R.string.md_heading,
+        R.string.md_bold_syntax to R.string.md_bold,
+        R.string.md_italic_syntax to R.string.md_italic,
+        R.string.md_strike_syntax to R.string.md_strike,
+        R.string.md_bullets_syntax to R.string.md_bullets,
+        R.string.md_numbers_syntax to R.string.md_numbers,
+        R.string.md_code_syntax to R.string.md_code,
+        R.string.md_codeblock_syntax to R.string.md_codeblock,
+        R.string.md_quote_syntax to R.string.md_quote,
+        R.string.md_link_syntax to R.string.md_link,
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.border(1.dp, PT.Border),
+        containerColor = PT.Fg,
+        title = {
+            Text(stringResource(R.string.markdown_help_title), color = PT.TopBarText, fontWeight = FontWeight.Bold)
+        },
+        text = {
+            Column(
+                Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                for ((syntax, label) in items) {
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(stringResource(label), color = PT.Muted, style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            stringResource(syntax),
+                            color = PT.FgText,
+                            fontFamily = FontFamily.Monospace,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(PT.Link.copy(alpha = 0.14f))
+                                .padding(horizontal = 6.dp, vertical = 3.dp),
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.markdown_help_close), color = PT.Link) }
         },
     )
 }
