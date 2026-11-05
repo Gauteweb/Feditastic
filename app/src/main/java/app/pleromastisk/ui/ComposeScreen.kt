@@ -67,6 +67,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.pleromastisk.Graph
@@ -244,6 +246,13 @@ fun ComposeScreen(
         )
     }
 
+    /** Markdown-knappene: omslutter markeringen eller setter tegn først på linjen. */
+    fun applyMarkdown(edit: (String, Int, Int) -> MdEdit) {
+        val r = edit(text.text, text.selection.start, text.selection.end)
+        text = TextFieldValue(r.text, TextRange(r.selStart, r.selEnd))
+        runCatching { focus.requestFocus() }
+    }
+
     fun saveAlt(target: Attachment, description: String) {
         val i = attachments.indexOfFirst { it.key == target.key }
         if (i >= 0) attachments[i] = attachments[i].copy(description = description)
@@ -363,6 +372,25 @@ fun ComposeScreen(
                         keyboardOptions = SentenceCase,
                         modifier = Modifier.fillMaxWidth(),
                     )
+                }
+                if (markdown && markdownSupported) {
+                    // Knapper som setter inn Markdown-koder der markøren står
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        listOf(
+                            Triple("#", R.string.md_btn_heading) { applyMarkdown { t, a, b -> prefixLines(t, a, b, "# ") } },
+                            Triple("**", R.string.md_bold) { applyMarkdown { t, a, b -> wrapMarkdown(t, a, b, "**") } },
+                            Triple("*", R.string.md_italic) { applyMarkdown { t, a, b -> wrapMarkdown(t, a, b, "*") } },
+                            Triple("~~", R.string.md_strike) { applyMarkdown { t, a, b -> wrapMarkdown(t, a, b, "~~") } },
+                            Triple("`", R.string.md_code) { applyMarkdown { t, a, b -> wrapMarkdown(t, a, b, "`") } },
+                            Triple(">", R.string.md_quote) { applyMarkdown { t, a, b -> prefixLines(t, a, b, "> ") } },
+                        ).forEach { (label, desc, action) ->
+                            val d = stringResource(desc)
+                            PButton(
+                                text = label, onClick = action,
+                                modifier = Modifier.weight(1f).semantics { contentDescription = d },
+                            )
+                        }
+                    }
                 }
                 OutlinedTextField(
                     value = text, onValueChange = { text = it },

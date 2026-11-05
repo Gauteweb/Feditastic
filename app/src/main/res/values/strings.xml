@@ -206,6 +206,7 @@
     <string name="markdown_help_title">Markdown</string>
     <string name="markdown_help_close">Close</string>
     <string name="md_heading">Heading (more # gives a smaller heading)</string>
+    <string name="md_btn_heading">Heading</string>
     <string name="md_heading_syntax"># Heading\n## Smaller heading</string>
     <string name="md_bold">Bold</string>
     <string name="md_bold_syntax">**bold text**</string>
