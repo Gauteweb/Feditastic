@@ -1,0 +1,1 @@
+- Markdown-knapper over tekstfeltet på skriveskjermen (overskrift, fet, kursiv, gjennomstreket, kode og sitat) når Markdown er slått på

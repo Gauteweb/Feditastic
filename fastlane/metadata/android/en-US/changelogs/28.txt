@@ -1,0 +1,1 @@
+- Markdown buttons above the text field on the new post screen (heading, bold, italic, strikethrough, code and quote) when Markdown is on
