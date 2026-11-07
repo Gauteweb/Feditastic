@@ -50,6 +50,9 @@ class SessionStore(context: Context) {
 
     private var cache: List<SavedAccount>? = null
 
+    /** Kalles når brukerlisten er endret (brukes til snarveiene på app-ikonet). */
+    var onAccountsChanged: ((List<SavedAccount>) -> Unit)? = null
+
     init {
         migrateSingleAccount()
         // Før tema per bruker: brukerne som allerede finnes, beholder temaet appen hadde
@@ -70,6 +73,7 @@ class SessionStore(context: Context) {
     private fun saveAccounts(list: List<SavedAccount>) {
         cache = list
         sp.edit().putString("accounts", json.encodeToString(list)).apply()
+        onAccountsChanged?.invoke(list)
     }
 
     var activeKey: String?

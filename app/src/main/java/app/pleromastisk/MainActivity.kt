@@ -32,8 +32,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PT.theme = AppTheme.fromId(Graph.store.activeTheme)
+        // Først: snarveien kan bytte bruker, og da skal den brukerens tema brukes
         if (savedInstanceState == null) handle(intent)
+        PT.theme = AppTheme.fromId(Graph.store.activeTheme)
 
         setContent {
             // Lyst tema: mørke ikoner i status- og navigasjonslinjen
@@ -77,12 +78,18 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handle(intent: Intent?) {
-        if (intent?.action == ACTION_COMPOSE) PendingCompose.requested.value = true
+        if (intent?.action == ACTION_COMPOSE) {
+            // Snarveien for en bestemt bruker: bytt til den brukeren først
+            val key = intent.getStringExtra(Shortcuts.EXTRA_ACCOUNT)
+                ?.takeIf { k -> Graph.store.accounts.any { it.key == k } }
+            if (key != null) auth.switchTo(key)
+            PendingCompose.requested.value = key ?: PendingCompose.ANY
+        }
         intent?.data?.let { auth.handleRedirect(it) }
     }
 
     companion object {
-        /** Snarveien «Nytt innlegg» (res/xml/shortcuts.xml). */
+        /** Snarveiene «Nytt innlegg» på app-ikonet (se [Shortcuts]). */
         const val ACTION_COMPOSE = "app.feditastic.action.COMPOSE"
     }
 }

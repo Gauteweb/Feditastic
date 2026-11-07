@@ -9,8 +9,8 @@
     <string name="nav_search">Search</string>
     <string name="nav_media">Media</string>
     <string name="nav_compose">Write</string>
-    <string name="shortcut_compose">New post</string>
-    <string name="shortcut_compose_long">Write a new post</string>
+    <string name="shortcut_compose_as">New post as %1$s</string>
+    <string name="shortcut_logged_out">This account is logged out</string>
     <string name="nav_notifications">Alerts</string>
     <string name="nav_profile">Profile</string>
     <string name="title_home">Home</string>

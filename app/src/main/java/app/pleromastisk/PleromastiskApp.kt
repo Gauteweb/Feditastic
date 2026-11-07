@@ -58,6 +58,8 @@ object Graph {
     fun init(app: Application) {
         appContext = app.applicationContext
         store = SessionStore(app)
+        store.onAccountsChanged = { Shortcuts.update(app, it) }
+        Shortcuts.update(app, store.accounts)
         api = ApiClient(store)
         updates = UpdateChecker(app)
     }

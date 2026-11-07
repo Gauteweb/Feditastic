@@ -143,11 +143,13 @@ private const val COMPOSE =
     "compose?replyId={replyId}&replyMentions={replyMentions}&replyTags={replyTags}&replyVis={replyVis}&editId={editId}"
 
 /**
- * Snarveien «Nytt innlegg» (langt trykk på app-ikonet) setter denne; hovedskjermen åpner
- * skriveskjermen når en bruker er logget inn, og nullstiller den.
+ * Snarveiene «Nytt innlegg» (langt trykk på app-ikonet) setter denne; hovedskjermen åpner
+ * skriveskjermen når riktig bruker er logget inn, og nullstiller den.
+ * null = ingenting, [ANY] = den aktive brukeren, ellers nøkkelen til brukeren det gjelder.
  */
 object PendingCompose {
-    val requested = MutableStateFlow(false)
+    const val ANY = ""
+    val requested = MutableStateFlow<String?>(null)
 }
 
 private val TopLevel = setOf(HOME, MEDIA, NOTIFICATIONS, SEARCH, PROFILE)
@@ -280,11 +282,12 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
         )
     }
 
-    // Snarveien «Nytt innlegg»: åpne skriveskjermen (om den ikke allerede er åpen)
+    // Snarveien «Nytt innlegg»: åpne skriveskjermen (om den ikke allerede er åpen).
+    // Gjelder den en annen bruker, venter vi til den brukeren er aktiv (skjermen lages da på nytt).
     LaunchedEffect(nav) {
         PendingCompose.requested.collect { requested ->
-            if (!requested) return@collect
-            PendingCompose.requested.value = false
+            if (requested == null || (requested != PendingCompose.ANY && requested != state.activeKey)) return@collect
+            PendingCompose.requested.value = null
             if (nav.currentDestination?.route?.startsWith(COMPOSE_BASE) != true) nav.navigate(COMPOSE_BASE)
         }
     }
