@@ -1,0 +1,1 @@
+- "New post" shortcut for each signed-in account when you long-press the app icon, with the account's profile picture

@@ -1,0 +1,1 @@
+- Snarveien «Nytt innlegg» ved langt trykk på app-ikonet finnes nå for hver innlogget bruker, med brukerens profilbilde
