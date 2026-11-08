@@ -241,6 +241,19 @@ class ApiClient(private val store: SessionStore) {
         return get(withPaging(path, maxId))
     }
 
+    /**
+     * Favorittmarkeringer, delinger, svar og nye følgere for en bestemt bruker (ikke nødvendigvis den aktive),
+     * brukt av timesoppsummeringen som går i bakgrunnen. Nyeste først, 40 om gangen.
+     */
+    suspend fun notificationsFor(account: SavedAccount, maxId: String?): List<Notification> {
+        val types = listOf("favourite", "reblog", "mention", "follow")
+            .joinToString("&") { "types[]=$it&include_types[]=$it" }
+        val request = builder(withPaging("/api/v1/notifications?$types", maxId, limit = 40), account.instance, auth = false)
+            .header("Authorization", "Bearer ${account.token}")
+            .get().build()
+        return exec(request) { json.decodeFromString<List<Notification>>(it) }
+    }
+
     suspend fun status(id: String): Status = get("/api/v1/statuses/$id")
     suspend fun statusContext(id: String): StatusContext = get("/api/v1/statuses/$id/context")
 

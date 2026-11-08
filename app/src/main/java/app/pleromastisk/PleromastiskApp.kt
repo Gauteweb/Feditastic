@@ -62,6 +62,7 @@ object Graph {
         Shortcuts.update(app, store.accounts)
         api = ApiClient(store)
         updates = UpdateChecker(app)
+        NotificationDigest.schedule(app)
     }
 
     private var emojiCache: Pair<String?, List<Emoji>>? = null

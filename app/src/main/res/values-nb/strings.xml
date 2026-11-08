@@ -264,4 +264,23 @@
     <string name="error_network">Fikk ikke kontakt med instansen. Sjekk nettverket og prøv igjen.</string>
     <string name="error_session_expired">Innloggingen er utløpt. Logg inn på nytt.</string>
     <string name="error_generic">Noe gikk galt: %1$s</string>
+    <string name="digest_channel">Timesoppsummering</string>
+    <string name="digest_channel_desc">Favorittmarkeringer, delinger, svar og nye følgere den siste timen</string>
+    <string name="digest_title_for">@%1$s – den siste timen har dette skjedd:</string>
+    <plurals name="digest_favourites">
+        <item quantity="one">%d ny favorittmarkering</item>
+        <item quantity="other">%d nye favorittmarkeringer</item>
+    </plurals>
+    <plurals name="digest_reblogs">
+        <item quantity="one">%d ny deling</item>
+        <item quantity="other">%d nye delinger</item>
+    </plurals>
+    <plurals name="digest_replies">
+        <item quantity="one">%d nytt svar</item>
+        <item quantity="other">%d nye svar</item>
+    </plurals>
+    <plurals name="digest_follows">
+        <item quantity="one">%d ny følger</item>
+        <item quantity="other">%d nye følgere</item>
+    </plurals>
 </resources>

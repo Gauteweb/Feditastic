@@ -264,4 +264,23 @@
     <string name="error_network">Could not reach the instance. Check your network and try again.</string>
     <string name="error_session_expired">Your login has expired. Please log in again.</string>
     <string name="error_generic">Something went wrong: %1$s</string>
+    <string name="digest_channel">Hourly summary</string>
+    <string name="digest_channel_desc">Favourites, boosts, replies and new followers from the last hour</string>
+    <string name="digest_title_for">@%1$s – in the last hour:</string>
+    <plurals name="digest_favourites">
+        <item quantity="one">%d new favourite</item>
+        <item quantity="other">%d new favourites</item>
+    </plurals>
+    <plurals name="digest_reblogs">
+        <item quantity="one">%d new boost</item>
+        <item quantity="other">%d new boosts</item>
+    </plurals>
+    <plurals name="digest_replies">
+        <item quantity="one">%d new reply</item>
+        <item quantity="other">%d new replies</item>
+    </plurals>
+    <plurals name="digest_follows">
+        <item quantity="one">%d new follower</item>
+        <item quantity="other">%d new followers</item>
+    </plurals>
 </resources>

@@ -1,5 +1,9 @@
 package app.pleromastisk.ui
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import app.pleromastisk.NotificationDigest
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -152,6 +156,11 @@ object PendingCompose {
     val requested = MutableStateFlow<String?>(null)
 }
 
+/** Som [PendingCompose], men for trykk på timesoppsummeringen: åpner Varsler-fanen. */
+object PendingNotifications {
+    val requested = MutableStateFlow<String?>(null)
+}
+
 private val TopLevel = setOf(HOME, MEDIA, NOTIFICATIONS, SEARCH, PROFILE)
 
 /** Fanene i bunnmenyen, i samme rekkefølge som knappene (brukes ved sveiping). */
@@ -289,6 +298,24 @@ private fun MainScaffold(auth: AuthViewModel, state: AuthState, chat: ChatSessio
             if (requested == null || (requested != PendingCompose.ANY && requested != state.activeKey)) return@collect
             PendingCompose.requested.value = null
             if (nav.currentDestination?.route?.startsWith(COMPOSE_BASE) != true) nav.navigate(COMPOSE_BASE)
+        }
+    }
+
+    // Trykk på timesoppsummeringen: vis Varsler-fanen når riktig bruker er aktiv
+    LaunchedEffect(nav) {
+        PendingNotifications.requested.collect { requested ->
+            if (requested == null || (requested != PendingCompose.ANY && requested != state.activeKey)) return@collect
+            PendingNotifications.requested.value = null
+            go(NOTIFICATIONS)
+        }
+    }
+
+    // Android 13 og nyere: be om lov til å vise varsler (timesoppsummeringen), én gang
+    val askNotifications = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+    LaunchedEffect(Unit) {
+        if (NotificationDigest.shouldAskPermission(Graph.appContext)) {
+            NotificationDigest.markPermissionAsked(Graph.appContext)
+            askNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 

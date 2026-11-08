@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import app.pleromastisk.ui.AppTheme
 import app.pleromastisk.ui.PT
 import app.pleromastisk.ui.PendingCompose
+import app.pleromastisk.ui.PendingNotifications
 import app.pleromastisk.ui.PleromastiskRoot
 import app.pleromastisk.ui.PleromastiskTheme
 import app.pleromastisk.vm.AuthViewModel
@@ -85,11 +86,21 @@ class MainActivity : ComponentActivity() {
             if (key != null) auth.switchTo(key)
             PendingCompose.requested.value = key ?: PendingCompose.ANY
         }
+        if (intent?.action == ACTION_NOTIFICATIONS) {
+            // Trykk på timesoppsummeringen: bytt til brukeren den gjelder, og vis varslene
+            val key = intent.getStringExtra(Shortcuts.EXTRA_ACCOUNT)
+                ?.takeIf { k -> Graph.store.accounts.any { it.key == k } }
+            if (key != null) auth.switchTo(key)
+            PendingNotifications.requested.value = key ?: PendingCompose.ANY
+        }
         intent?.data?.let { auth.handleRedirect(it) }
     }
 
     companion object {
         /** Snarveiene «Nytt innlegg» på app-ikonet (se [Shortcuts]). */
         const val ACTION_COMPOSE = "app.feditastic.action.COMPOSE"
+
+        /** Trykk på timesoppsummeringen av varsler (se [NotificationDigest]). */
+        const val ACTION_NOTIFICATIONS = "app.feditastic.action.NOTIFICATIONS"
     }
 }
