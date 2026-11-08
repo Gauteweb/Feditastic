@@ -1,0 +1,1 @@
+- Timesoppsummering: én gang i timen sjekker appen etter nye favorittmarkeringer, delinger, svar og følgere og viser et varsel for hver bruker. Trykk på det for å åpne Varsler-fanen

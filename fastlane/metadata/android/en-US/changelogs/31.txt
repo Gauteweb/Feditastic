@@ -1,0 +1,1 @@
+- Hourly summary: once an hour the app checks for new favourites, boosts, replies and followers and shows a notification for each account. Tap it to open the notifications tab

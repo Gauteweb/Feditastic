@@ -21,8 +21,8 @@ android {
         applicationId = "app.feditastic"
         minSdk = 26
         targetSdk = 35
-        versionCode = 30
-        versionName = "2.3.1"
+        versionCode = 31
+        versionName = "2.4.0"
         // Varsel om ny utgivelse på GitHub: bare i egne bygg (githubUpdateCheck=true i local.properties),
         // ikke i F-Droid-bygg, der F-Droid står for oppdateringene.
         buildConfigField(
