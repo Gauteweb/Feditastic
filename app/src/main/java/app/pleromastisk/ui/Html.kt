@@ -50,6 +50,8 @@ fun htmlToRich(
     onHashtag: (String) -> Unit = {},
     mentions: List<Mention> = emptyList(),
     onProfile: (id: String?, url: String) -> Unit = { _, _ -> },
+    /** false = lenker får bare utseendet, ikke klikk (se [RichText] med maxLines). */
+    clickableLinks: Boolean = true,
 ): Pair<AnnotatedString, Map<String, InlineTextContent>> {
     val cleaned = html
         .replace(Regex("<span class=\"invisible\">.*?</span>", RegexOption.DOT_MATCHES_ALL), "")
@@ -69,7 +71,9 @@ fun htmlToRich(
                     val url = mark.url
                     val linkText = plain.substring(start, end)
                     val tag = hashtagFromLink(url, linkText)
-                    if (tag == null && (linkText.startsWith("@") || mentions.any { it.url == url })) {
+                    if (!clickableLinks) {
+                        addStyle(style.style ?: SpanStyle(), start, end)
+                    } else if (tag == null && (linkText.startsWith("@") || mentions.any { it.url == url })) {
                         // @omtaler åpner profilen i appen (via egen instans) i stedet for nettsiden
                         val id = mentionFor(url, linkText, mentions)?.id
                         addLink(
@@ -172,8 +176,11 @@ fun RichText(
 ) {
     val onHashtag = LocalHashtagClick.current
     val onProfile = LocalProfileLinkClick.current
-    val (text, inline) = remember(html, emojis, onHashtag, mentions, onProfile) {
-        htmlToRich(html, emojis, PT.Link, onHashtag, mentions, onProfile)
+    // Compose 1.7 kræsjer (IndexOutOfBounds i getPathForRange) når en lenke ligger i et avsnitt som
+    // faller utenfor maxLines, så avkortede forhåndsvisninger får lenker uten klikk.
+    val clickableLinks = maxLines == Int.MAX_VALUE
+    val (text, inline) = remember(html, emojis, onHashtag, mentions, onProfile, clickableLinks) {
+        htmlToRich(html, emojis, PT.Link, onHashtag, mentions, onProfile, clickableLinks)
     }
     val cut = collapseAfter?.let { collapsePoint(text.text, it) }
     if (cut == null) {
