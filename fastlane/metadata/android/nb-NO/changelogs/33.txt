@@ -1,0 +1,3 @@
+- Tekststørrelse: velg Liten, Medium eller Stor i temadialogen
+- Hold inne Del eller Favoritt på et innlegg for å se hvem som har delt eller favorittmarkert det
+- Forhåndsvisningen av temaet Automatisk viser nå mørke og lyse farger over hverandre

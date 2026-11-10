@@ -1,0 +1,3 @@
+- Text size: choose Small, Medium or Large in the theme dialog
+- Long-press Boost or Favourite on a post to see who boosted or favourited it
+- The Automatic theme preview now shows the dark and light colours stacked
