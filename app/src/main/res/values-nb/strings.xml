@@ -50,7 +50,11 @@
     <string name="about_close">Lukk</string>
     <string name="theme_button">Velg tema</string>
     <string name="theme_title">Tema</string>
-    <string name="theme_auto">Automatisk (følger telefonen)</string>
+    <string name="theme_auto">Automatisk</string>
+    <string name="font_title">Tekststørrelse</string>
+    <string name="font_small">Liten</string>
+    <string name="font_medium">Medium</string>
+    <string name="font_large">Stor</string>
     <string name="theme_green">Grønn</string>
     <string name="theme_blue">Blå</string>
     <string name="theme_purple">Lilla</string>
@@ -159,6 +163,10 @@
     <!-- Handlinger -->
     <string name="action_reply">Svar</string>
     <string name="action_boost">Del</string>
+    <string name="who_boosted">Delt av</string>
+    <string name="who_favourited">Favorittmarkert av</string>
+    <string name="who_loading">Henter …</string>
+    <string name="who_none">Ingen ennå</string>
     <string name="action_favourite">Favoritt</string>
     <string name="action_bookmark">Bokmerke</string>
     <string name="action_more">Flere valg</string>

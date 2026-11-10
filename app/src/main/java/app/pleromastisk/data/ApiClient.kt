@@ -259,6 +259,10 @@ class ApiClient(private val store: SessionStore) {
 
     // ---------- Handlinger på innlegg ----------
 
+    /** Hvem som har favorittmarkert / delt et innlegg (de første 80). */
+    suspend fun favouritedBy(id: String): List<Account> = get("/api/v1/statuses/$id/favourited_by?limit=80")
+    suspend fun rebloggedBy(id: String): List<Account> = get("/api/v1/statuses/$id/reblogged_by?limit=80")
+
     suspend fun favourite(id: String, on: Boolean): Status =
         post("/api/v1/statuses/$id/${if (on) "favourite" else "unfavourite"}")
 

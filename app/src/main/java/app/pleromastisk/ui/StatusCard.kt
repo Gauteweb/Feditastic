@@ -5,6 +5,10 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.layout.Arrangement
@@ -50,6 +54,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.remember
@@ -421,6 +426,9 @@ private fun MediaCarousel(items: List<MediaAttachment>, hiddenLabel: String?, on
 @Composable
 private fun ActionRow(s: Status, actions: StatusActions) {
     val canBoost = s.visibility == "public" || s.visibility == "unlisted" || s.reblogged
+    // Langt trykk på Del eller Favoritt viser hvem som har gjort det
+    var whoList by remember { mutableStateOf<WhoKind?>(null) }
+    whoList?.let { kind -> WhoDialog(s, kind, actions) { whoList = null } }
     Row(
         Modifier
             .fillMaxWidth()
@@ -435,11 +443,13 @@ private fun ActionRow(s: Status, actions: StatusActions) {
         ActionButton(
             Icons.Filled.Repeat, stringResource(R.string.action_boost),
             s.reblogsCount, if (s.reblogged) PT.Green else PT.Muted, enabled = canBoost,
+            onLongClick = { whoList = WhoKind.BOOST }.takeIf { s.reblogsCount > 0 },
         ) { actions.onBoost(s) }
         ActionButton(
             if (s.favourited) Icons.Filled.Star else Icons.Filled.StarBorder,
             stringResource(R.string.action_favourite),
             s.favouritesCount, if (s.favourited) PT.Orange else PT.Muted,
+            onLongClick = { whoList = WhoKind.FAVOURITE }.takeIf { s.favouritesCount > 0 },
         ) { actions.onFavourite(s) }
         ActionButton(
             if (s.bookmarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
@@ -450,6 +460,7 @@ private fun ActionRow(s: Status, actions: StatusActions) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ActionButton(
     icon: ImageVector,
@@ -457,12 +468,13 @@ private fun ActionButton(
     count: Int?,
     tint: Color,
     enabled: Boolean = true,
+    onLongClick: (() -> Unit)? = null,
     onClick: () -> Unit,
 ) {
     Row(
         Modifier
             .heightIn(min = 40.dp)
-            .clickable(enabled = enabled, onClick = onClick)
+            .combinedClickable(enabled = enabled, onLongClick = onLongClick, onClick = onClick)
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -481,6 +493,60 @@ private fun ActionButton(
             )
         }
     }
+}
+
+private enum class WhoKind { BOOST, FAVOURITE }
+
+/** Liste over hvem som har delt eller favorittmarkert innlegget. Trykk på en person åpner profilen. */
+@Composable
+private fun WhoDialog(s: Status, kind: WhoKind, actions: StatusActions, onDismiss: () -> Unit) {
+    val accounts by produceState<List<Account>?>(null, s.id, kind) {
+        value = runCatching {
+            if (kind == WhoKind.BOOST) Graph.api.rebloggedBy(s.id) else Graph.api.favouritedBy(s.id)
+        }.getOrDefault(emptyList())
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.border(1.dp, PT.Border),
+        containerColor = PT.Fg,
+        title = {
+            Text(
+                stringResource(if (kind == WhoKind.BOOST) R.string.who_boosted else R.string.who_favourited),
+                color = PT.TopBarText, fontWeight = FontWeight.Bold,
+            )
+        },
+        text = {
+            val list = accounts
+            when {
+                list == null -> Text(stringResource(R.string.who_loading), color = PT.Muted)
+                list.isEmpty() -> Text(stringResource(R.string.who_none), color = PT.Muted)
+                else -> LazyColumn(Modifier.heightIn(max = 420.dp)) {
+                    items(list, key = { it.id }) { a ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable { onDismiss(); actions.onOpenProfile(a) }
+                                .padding(vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Avatar(a.avatar, 36)
+                            Spacer(Modifier.width(10.dp))
+                            Column(Modifier.weight(1f)) {
+                                EmojiText(
+                                    a.displayName.ifBlank { a.username }, a.emojis,
+                                    color = PT.Text, fontWeight = FontWeight.Bold, maxLines = 1,
+                                )
+                                Text("@${a.acct}", color = PT.Muted, fontSize = 13.sp, maxLines = 1)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.about_close), color = PT.Link) }
+        },
+    )
 }
 
 @Composable

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -47,8 +48,8 @@ fun ThemePickerDialog(onDismiss: () -> Unit) {
                     active = PT.choice !in AppTheme.entries.map { it.id },
                     onClick = { choose(AppTheme.AUTO) },
                 ) {
-                    // Halvt mørk, halvt lys: følger telefonen
-                    Row {
+                    // Mørk over lys: følger telefonen
+                    Column {
                         ThemeSwatch(AppTheme.DARK.colors)
                         ThemeSwatch(AppTheme.LIGHT.colors)
                     }
@@ -60,6 +61,26 @@ fun ThemePickerDialog(onDismiss: () -> Unit) {
                         onClick = { choose(theme.id) },
                     ) { ThemeSwatch(theme.colors) }
                 }
+                Spacer(Modifier.height(8.dp))
+                Text(stringResource(R.string.font_title), color = PT.TopBarText, fontWeight = FontWeight.Bold)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FontSize.entries.forEach { size ->
+                        val active = size == PT.fontSize
+                        Box(
+                            Modifier
+                                .weight(1f)
+                                .border(1.dp, if (active) PT.Border else PT.Border.copy(alpha = 0.35f))
+                                .clickable { chooseFont(size) }
+                                .padding(vertical = 10.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                stringResource(size.label), color = PT.Text,
+                                fontWeight = if (active) FontWeight.Bold else FontWeight.Normal,
+                            )
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
@@ -68,6 +89,11 @@ fun ThemePickerDialog(onDismiss: () -> Unit) {
             }
         },
     )
+}
+
+private fun chooseFont(size: FontSize) {
+    PT.fontSize = size
+    Graph.store.fontSize = size.id
 }
 
 private fun choose(id: String) {

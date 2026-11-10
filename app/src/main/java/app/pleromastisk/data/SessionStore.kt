@@ -199,6 +199,11 @@ class SessionStore(context: Context) {
         get() = sp.getString("theme", null)
         set(v) = sp.edit().putString("theme", v).apply()
 
+    /** Skriftstørrelse (id fra FontSize), felles for alle brukere. */
+    var fontSize: String?
+        get() = sp.getString("font_size", null)
+        set(v) = sp.edit().putString("font_size", v).apply()
+
     /** Temaet for den aktive brukeren, eller det sist valgte hvis brukeren ikke har valgt noe. */
     val activeTheme: String? get() = active?.theme ?: theme
 

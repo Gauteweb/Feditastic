@@ -1,6 +1,8 @@
 package app.pleromastisk.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -154,6 +156,9 @@ object PT {
 
     val theme: AppTheme get() = AppTheme.resolve(choice, systemDark)
 
+    /** Valgt skriftstørrelse, ganges med telefonens egen skriftskalering. */
+    var fontSize by mutableStateOf(FontSize.MEDIUM)
+
     private val c: PtColors get() = theme.colors
 
     val Bg: Color get() = c.bg
@@ -208,8 +213,28 @@ private val SharpShapes = Shapes(
 fun PleromastiskTheme(content: @Composable () -> Unit) {
     val theme = PT.theme
     val scheme = remember(theme) { schemeFor(theme.colors) }
+    val density = LocalDensity.current
+    val scaled = remember(density, PT.fontSize) {
+        Density(density.density, density.fontScale * PT.fontSize.scale)
+    }
     MaterialTheme(colorScheme = scheme, shapes = SharpShapes) {
-        CompositionLocalProvider(LocalContentColor provides PT.FgText, content = content)
+        CompositionLocalProvider(
+            LocalContentColor provides PT.FgText,
+            LocalDensity provides scaled,
+            content = content,
+        )
+    }
+}
+
+/** Skriftstørrelse i appen. Medium er slik teksten alltid har vært. */
+enum class FontSize(val id: String, @StringRes val label: Int, val scale: Float) {
+    SMALL("small", R.string.font_small, 0.85f),
+    MEDIUM("medium", R.string.font_medium, 1f),
+    LARGE("large", R.string.font_large, 1.15f),
+    ;
+
+    companion object {
+        fun fromId(id: String?): FontSize = entries.firstOrNull { it.id == id } ?: MEDIUM
     }
 }
 

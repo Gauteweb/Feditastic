@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import app.pleromastisk.ui.AppTheme
+import app.pleromastisk.ui.FontSize
 import app.pleromastisk.ui.PT
 import app.pleromastisk.ui.PendingCompose
 import app.pleromastisk.ui.PendingNotifications
@@ -39,6 +40,7 @@ class MainActivity : ComponentActivity() {
         if (savedInstanceState == null) handle(intent)
         PT.choice = Graph.store.activeTheme ?: AppTheme.AUTO
         PT.systemDark = isNightMode()
+        PT.fontSize = FontSize.fromId(Graph.store.fontSize)
 
         setContent {
             // Følger telefonens lyse/mørke modus når temaet er «Automatisk»
