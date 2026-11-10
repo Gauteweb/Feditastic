@@ -1,0 +1,2 @@
+- Fixed a crash when opening the notifications tab
+- New "Automatic" theme that follows the phone's light/dark mode. Accounts that used Dark or Light switch to Automatic once

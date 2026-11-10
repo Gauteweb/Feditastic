@@ -1,0 +1,2 @@
+- Rettet et kræsj når man åpnet Varsler-fanen
+- Nytt tema «Automatisk» som følger telefonens lyse/mørke modus. Brukere som hadde Mørk eller Lys, går over til Automatisk én gang
