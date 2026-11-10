@@ -42,30 +42,23 @@ fun ThemePickerDialog(onDismiss: () -> Unit) {
         },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                AppTheme.entries.forEach { theme ->
-                    val active = theme == PT.theme
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .border(1.dp, if (active) PT.Border else PT.Border.copy(alpha = 0.35f))
-                            .clickable {
-                                PT.theme = theme
-                                Graph.store.saveTheme(theme.id)
-                            }
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        ThemeSwatch(theme.colors)
-                        Spacer(Modifier.width(12.dp))
-                        Text(
-                            stringResource(theme.label), color = PT.Text,
-                            fontWeight = if (active) FontWeight.Bold else FontWeight.Normal,
-                            modifier = Modifier.weight(1f),
-                        )
-                        if (active) {
-                            Icon(Icons.Filled.Check, null, tint = PT.TopBarText, modifier = Modifier.size(22.dp))
-                        }
+                ThemeRow(
+                    label = stringResource(R.string.theme_auto),
+                    active = PT.choice !in AppTheme.entries.map { it.id },
+                    onClick = { choose(AppTheme.AUTO) },
+                ) {
+                    // Halvt mørk, halvt lys: følger telefonen
+                    Row {
+                        ThemeSwatch(AppTheme.DARK.colors)
+                        ThemeSwatch(AppTheme.LIGHT.colors)
                     }
+                }
+                AppTheme.entries.forEach { theme ->
+                    ThemeRow(
+                        label = stringResource(theme.label),
+                        active = theme.id == PT.choice,
+                        onClick = { choose(theme.id) },
+                    ) { ThemeSwatch(theme.colors) }
                 }
             }
         },
@@ -75,6 +68,34 @@ fun ThemePickerDialog(onDismiss: () -> Unit) {
             }
         },
     )
+}
+
+private fun choose(id: String) {
+    PT.choice = id
+    Graph.store.saveTheme(id)
+}
+
+@Composable
+private fun ThemeRow(label: String, active: Boolean, onClick: () -> Unit, swatch: @Composable () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .border(1.dp, if (active) PT.Border else PT.Border.copy(alpha = 0.35f))
+            .clickable(onClick = onClick)
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        swatch()
+        Spacer(Modifier.width(12.dp))
+        Text(
+            label, color = PT.Text,
+            fontWeight = if (active) FontWeight.Bold else FontWeight.Normal,
+            modifier = Modifier.weight(1f),
+        )
+        if (active) {
+            Icon(Icons.Filled.Check, null, tint = PT.TopBarText, modifier = Modifier.size(22.dp))
+        }
+    }
 }
 
 /** Liten forhåndsvisning av et tema: bakgrunn med en flate, en knapp og overskriftsfargen. */

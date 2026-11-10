@@ -50,6 +50,7 @@
     <string name="about_close">Close</string>
     <string name="theme_button">Choose theme</string>
     <string name="theme_title">Theme</string>
+    <string name="theme_auto">Automatic (follows phone)</string>
     <string name="theme_green">Green</string>
     <string name="theme_blue">Blue</string>
     <string name="theme_purple">Purple</string>

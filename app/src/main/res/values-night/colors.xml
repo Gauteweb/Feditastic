@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Vindusbakgrunnen før appen tegnes i mørk modus: samme som temaet Mørk -->
+    <color name="pt_bg">#1A1A1A</color>
+</resources>

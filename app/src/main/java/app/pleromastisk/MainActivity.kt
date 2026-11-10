@@ -3,6 +3,7 @@ package app.pleromastisk
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
@@ -35,9 +37,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Først: snarveien kan bytte bruker, og da skal den brukerens tema brukes
         if (savedInstanceState == null) handle(intent)
-        PT.theme = AppTheme.fromId(Graph.store.activeTheme)
+        PT.choice = Graph.store.activeTheme ?: AppTheme.AUTO
+        PT.systemDark = isNightMode()
 
         setContent {
+            // Følger telefonens lyse/mørke modus når temaet er «Automatisk»
+            PT.systemDark = isSystemInDarkTheme()
             // Lyst tema: mørke ikoner i status- og navigasjonslinjen
             val light = PT.theme.colors.light
             LaunchedEffect(light) {
@@ -65,6 +70,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun isNightMode(): Boolean =
+        (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
     /** Ved oppstart, og når appen hentes fram igjen etter mer enn et døgn: se etter ny versjon. */
     override fun onStart() {

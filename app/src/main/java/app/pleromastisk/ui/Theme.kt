@@ -132,16 +132,27 @@ enum class AppTheme(val id: String, @StringRes val label: Int, val colors: PtCol
     ;
 
     companion object {
-        fun fromId(id: String?): AppTheme = entries.firstOrNull { it.id == id } ?: DARK
+        /** Lagret id for «Automatisk»: Mørk når telefonen er i mørk modus, ellers Lys. */
+        const val AUTO = "auto"
+
+        /** Temaet som skal vises for en lagret id. Ukjent eller ikke valgt = automatisk. */
+        fun resolve(id: String?, systemDark: Boolean): AppTheme =
+            entries.firstOrNull { it.id == id } ?: if (systemDark) DARK else LIGHT
     }
 }
 
 /**
- * Fargene i det valgte temaet. [theme] er Compose-tilstand, så alt som leser fargene tegnes på nytt
- * med en gang brukeren bytter tema.
+ * Fargene i det valgte temaet. [choice] og [systemDark] er Compose-tilstand, så alt som leser fargene
+ * tegnes på nytt med en gang brukeren bytter tema eller telefonen bytter mellom lys og mørk modus.
  */
 object PT {
-    var theme by mutableStateOf(AppTheme.DARK)
+    /** Lagret tema-id ([AppTheme.id] eller [AppTheme.AUTO]). */
+    var choice by mutableStateOf(AppTheme.AUTO)
+
+    /** Om telefonen er i mørk modus. Brukes når [choice] er automatisk. */
+    var systemDark by mutableStateOf(true)
+
+    val theme: AppTheme get() = AppTheme.resolve(choice, systemDark)
 
     private val c: PtColors get() = theme.colors
 

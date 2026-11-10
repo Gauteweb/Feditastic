@@ -208,7 +208,7 @@ fun PleromastiskRoot(auth: AuthViewModel) {
     // Chatten er ikke knyttet til Pleroma-brukeren, og holdes i live også når man bytter bruker
     val chat = rememberChatSession()
     // Hver bruker har sitt eget tema: bytt når en annen bruker blir aktiv (eller alle er logget ut)
-    LaunchedEffect(state.activeKey) { PT.theme = AppTheme.fromId(Graph.store.activeTheme) }
+    LaunchedEffect(state.activeKey) { PT.choice = Graph.store.activeTheme ?: AppTheme.AUTO }
     CompositionLocalProvider(LocalImageViewer provides { images, index -> viewer = images to index }) {
         Box(Modifier.fillMaxSize()) {
             if (!state.loggedIn) {

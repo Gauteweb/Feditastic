@@ -50,6 +50,7 @@
     <string name="about_close">Lukk</string>
     <string name="theme_button">Velg tema</string>
     <string name="theme_title">Tema</string>
+    <string name="theme_auto">Automatisk (følger telefonen)</string>
     <string name="theme_green">Grønn</string>
     <string name="theme_blue">Blå</string>
     <string name="theme_purple">Lilla</string>

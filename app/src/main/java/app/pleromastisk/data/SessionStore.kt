@@ -59,6 +59,7 @@ class SessionStore(context: Context) {
         theme?.let { current ->
             if (accounts.any { it.theme == null }) saveAccounts(accounts.map { it.copy(theme = it.theme ?: current) })
         }
+        migrateToAutoTheme()
     }
 
     // ---------- Brukere ----------
@@ -205,6 +206,20 @@ class SessionStore(context: Context) {
     fun saveTheme(id: String) {
         theme = id
         updateActive { it.copy(theme = id) }
+    }
+
+    /**
+     * Før «Automatisk» tema: Mørk og Lys var de vanlige temaene. De blir automatiske (følger telefonens
+     * lyse/mørke modus) én gang; de andre temaene beholdes. Senere valg av Mørk eller Lys står seg.
+     */
+    private fun migrateToAutoTheme() {
+        if (sp.getBoolean("theme_auto_migrated", false)) return
+        fun auto(id: String?) = if (id == "dark" || id == "light") "auto" else id
+        theme?.let { theme = auto(it) }
+        if (accounts.any { it.theme == "dark" || it.theme == "light" }) {
+            saveAccounts(accounts.map { it.copy(theme = auto(it.theme)) })
+        }
+        sp.edit().putBoolean("theme_auto_migrated", true).apply()
     }
 
     /** Før flere brukere: én bruker lå i egne nøkler. Flyttes inn i brukerlisten første gang. */
