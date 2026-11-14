@@ -1,0 +1,2 @@
+- Bilder i innlegg fyller nå alltid bredden: ett bilde vises i full høyde (beskjæres bare om det er høyere enn skjermen), bilder i rutenett fyller ruten
+- Bilder i lenkeforhåndsvisninger fyller bredden og beskjæres sentrert i høyden

@@ -1,0 +1,2 @@
+- Images in posts now always fill the width: a single image shows its full height (cropped only if taller than the screen), images in a grid fill their square
+- Link preview images fill the width and are cropped in height, centred
