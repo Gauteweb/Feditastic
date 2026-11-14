@@ -14,6 +14,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,6 +66,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -637,10 +639,10 @@ private fun MediaGrid(items: List<MediaAttachment>, sensitive: Boolean) {
                 Text(stringResource(R.string.sensitive_media), color = PT.Orange, modifier = Modifier.padding(8.dp))
             }
         } else if (items.size == 1) {
-            // Ett bilde: full bredde, høyden følger bildets egne proporsjoner (ingen beskjæring).
+            // Ett bilde: full bredde, høyden følger bildets egne proporsjoner (beskjæres bare om det er høyere enn skjermen).
             MediaTile(items[0], single = true, onClick = { open(items[0]) }, modifier = Modifier.fillMaxWidth())
         } else {
-            // Flere bilder: to kolonner. Hvert bilde vises hele (tilpasset en rute), ikke beskåret.
+            // Flere bilder: to kolonner med kvadratiske ruter som fylles helt (sentrert beskjæring).
             items.chunked(2).forEach { row ->
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     row.forEach { m -> MediaTile(m, single = false, onClick = { open(m) }, modifier = Modifier.weight(1f)) }
@@ -731,11 +733,33 @@ private fun MediaTile(m: MediaAttachment, single: Boolean, onClick: () -> Unit, 
                     .fillMaxWidth()
                     .then(if (ratio != null) Modifier.aspectRatio(ratio) else Modifier.heightIn(min = 120.dp)),
             )
+        } else if (shown != null && single) {
+            // Full bredde; høyden følger bildets faktiske proporsjoner (målt når det er lastet,
+            // ellers det instansen oppgir). Høyere enn skjermen: beskjæres sentrert.
+            var measured by rememberSaveable(m.id) { mutableStateOf<Float?>(null) }
+            val real = measured ?: m.aspectRatio
+            val maxH = (LocalConfiguration.current.screenHeightDp * 0.8f).dp
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+                val h = if (real != null) (maxWidth / real).coerceAtMost(maxH) else null
+                AsyncImage(
+                    model = shown,
+                    contentDescription = m.description,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (h != null) Modifier.height(h) else Modifier.heightIn(min = 120.dp)),
+                    onSuccess = { state ->
+                        val size = state.painter.intrinsicSize
+                        if (size.width > 0f && size.height > 0f) measured = size.width / size.height
+                    },
+                )
+            }
         } else if (shown != null) {
+            // Ruter i rutenettet fylles helt (sentrert beskjæring); hele bildet vises ved trykk
             AsyncImage(
                 model = shown,
                 contentDescription = m.description,
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .then(if (ratio != null) Modifier.aspectRatio(ratio) else Modifier.heightIn(min = 120.dp)),
@@ -834,15 +858,24 @@ private fun LinkCard(card: Card) {
             },
     ) {
         if (!card.image.isNullOrBlank()) {
-            AsyncImage(
-                model = card.image,
-                contentDescription = card.title,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 80.dp, max = 240.dp)
-                    .background(PT.Bg),
-            )
+            // Full bredde; høyden følger bildet opp til 240 dp, deretter beskjæres det sentrert
+            var ratio by rememberSaveable(card.image) { mutableStateOf<Float?>(null) }
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+                val h = ratio?.let { (maxWidth / it).coerceIn(80.dp, 240.dp) } ?: 160.dp
+                AsyncImage(
+                    model = card.image,
+                    contentDescription = card.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(h)
+                        .background(PT.Bg),
+                    onSuccess = { state ->
+                        val size = state.painter.intrinsicSize
+                        if (size.width > 0f && size.height > 0f) ratio = size.width / size.height
+                    },
+                )
+            }
             Box(Modifier.fillMaxWidth().height(1.dp).background(PT.Border.copy(alpha = 0.6f)))
         }
         Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
